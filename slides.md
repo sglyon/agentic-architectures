@@ -123,15 +123,16 @@ This is the fundamental challenge we face: building reliable systems on top of i
 -->
 
 ---
-layout: top-title
+layout: top-title-two-cols
 color: blue-light
+columns: is-6
 ---
 
 :: title ::
 
 # The Big Three: LLM Task Alignment (background)
 
-:: content ::
+:: left ::
 
 <div class="flex justify-center items-center mt-8">
   <div class="relative">
@@ -148,13 +149,33 @@ color: blue-light
   </div>
 </div>
 
-<div class="text-center mt-4 text-lg text-gray-600">
-  <strong>All three must align</strong> • Model intelligence determines reach<br/>
-  But direction is <em>always</em> governed by these three
+
+:: right ::
+
+<div class="flex flex-col justify-center h-full">
+
+## 🏹 The Archery Analogy
+
+<div class="mt-4 space-y-3">
+
+**The Big Three = Your Aim**
+- Where you point the arrow
+- Must be perfectly aligned
+
+**Model Power = Draw Strength**
+- How far the arrow flies
+- Stronger model → distant targets
+
+**Perfect Alignment = Bullseye**
+- All three working in harmony
+- Without aim, power is wasted
+
+</div>
+
 </div>
 
 <!--
-The Big Three concept: Every LLM interaction is governed by these three elements. They must work in harmony. The model's intelligence determines how far you can go, but the direction is always set by prompt, context, and tools.
+Think of it like archery: The Big Three (prompt, context, tools) determine your aim - where the arrow points. The model's power is like the draw strength - how far the arrow can fly. To hit the bullseye at any distance, you need perfect alignment of all three. A more powerful model lets you hit more ambitious, distant targets, but without proper aim, even the strongest bow misses.
 -->
 
 ---
@@ -1536,7 +1557,7 @@ color: blue-light
 
 <Admonition v-click title="📓 Open the Notebook" color="yellow-light" width="100%">
 
-**Get started**: Open `agentic-practice.ipynb` for hands-on exercises with starter code and test cases
+**Get started**: Open [agentic-practice.ipynb](https://raw.githubusercontent.com/sglyon/agentic-architectures/3d6d57c8a70645814f6bb96dc92a3b9b65b4c15e/agentic-practice.ipynb) for hands-on exercises with starter code and test cases
 
 </Admonition>
 
