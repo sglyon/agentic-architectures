@@ -9,7 +9,8 @@ info: |
   production-ready approaches.
 
   UCF MSDA - Final Semester
-class: text-center
+layout: cover
+color: white
 drawings:
   persist: false
 transition: slide-left
@@ -20,23 +21,376 @@ mdc: true
 
 From Theory to Production
 
-<div class="text-gray-500 mt-8">
-Spencer Lyon <br />
-CAP-6942: Capstone<br/>
+**Spencer Lyon**
+CAP-6942: Capstone
 University of Central Florida
-</div>
 
-<div @click="$slidev.nav.next" class="mt-12 py-1 cursor-pointer" hover:bg="white op-10">
-  Press Space for next page <carbon:arrow-right />
-</div>
+:: note ::
+
+Press Space for next page →
 
 <!--
 Welcome to our lecture on building reliable agentic AI systems. Today we'll focus on practical insights from real production systems, not just theoretical concepts.
 -->
 
 ---
+layout: top-title
+color: blue-light
+---
+
+:: title ::
+
+# Today's Journey
+
+:: content ::
+
+<div class="grid grid-cols-4 gap-8 mt-12">
+  <div class="text-center" v-click>
+    <div class="text-4xl mb-4">🎯</div>
+    <div class="text-xl font-bold text-blue-400">Background</div>
+    <div class="text-sm text-gray-400 mt-2">How to work with LLMs?<br/>What are agents?<br/>Why now?</div>
+  </div>
+
+  <div class="text-center" v-click>
+    <div class="text-4xl mb-4">🧠</div>
+    <div class="text-xl font-bold text-green-400">Principles</div>
+    <div class="text-sm text-gray-400 mt-2">Building blocks<br/>Core concepts</div>
+  </div>
+
+  <div class="text-center" v-click>
+    <div class="text-4xl mb-4">🔄</div>
+    <div class="text-xl font-bold text-purple-400">Patterns</div>
+    <div class="text-sm text-gray-400 mt-2">6 proven architectures<br/>When to use each</div>
+  </div>
+
+  <div class="text-center" v-click>
+    <div class="text-4xl mb-4">⚡</div>
+    <div class="text-xl font-bold text-red-400">Practice</div>
+    <div class="text-sm text-gray-400 mt-2">Real implementation<br/>Production tips</div>
+  </div>
+</div>
+
+<div class="text-center mt-12 text-gray-400" v-click>
+From theory to production-ready systems
+</div>
+
+<!--
+Today we'll cover four main areas. First, we'll establish the background - understanding what agents really are and why they're suddenly everywhere. Then we'll dive into the fundamental principles and building blocks that make agents work. Next, we'll explore six proven patterns that have emerged from real production systems. Finally, we'll put it all into practice with actual implementation strategies. The goal is to give you practical, production-ready knowledge, not just theory.
+-->
+
+---
+layout: section
+color: blue-light
+---
+
+# Background
+
+Foundational concepts
+
+<!--
+Let's get started with some background knowledge/info
+-->
+
+---
+layout: top-title
+color: blue-light
+---
+
+:: title ::
+
+# The Foundation: Generative AI
+
+:: content ::
+
+<v-clicks>
+
+- **Modern agents are built on generative models**
+  - Primarily Large Language Models (LLMs)
+  - Powerful reasoning and generation capabilities
+
+- **Generative models are inherently non-deterministic**
+  - Same input → Different outputs
+  - Probabilistic, not deterministic like traditional code
+
+- **Requires careful scaffolding for reliable results**
+  - Can't just "let it run wild"
+  - Need structure, validation, and control
+
+</v-clicks>
+
+<!--
+This is the fundamental challenge we face: building reliable systems on top of inherently unreliable components. It's like building a precision watch using parts that behave slightly differently each time.
+-->
+
+---
+layout: top-title
+color: blue-light
+---
+
+:: title ::
+
+# The Big Three: LLM Task Alignment (background)
+
+:: content ::
+
+<div class="flex justify-center items-center mt-8">
+  <div class="relative">
+    <svg width="400" height="350" viewBox="0 0 400 350">
+      <circle cx="150" cy="130" r="100" fill="#3B82F6" opacity="0.3" stroke="#3B82F6" stroke-width="2"/>
+      <circle cx="250" cy="130" r="100" fill="#10B981" opacity="0.3" stroke="#10B981" stroke-width="2"/>
+      <circle cx="200" cy="210" r="100" fill="#8B5CF6" opacity="0.3" stroke="#8B5CF6" stroke-width="2"/>
+      <text x="105" y="115" text-anchor="middle" font-size="6" font-weight="bold" fill="#1E40AF">Prompt</text>
+      <text x="300" y="115" text-anchor="middle" font-size="6" font-weight="bold" fill="#047857">Context</text>
+      <text x="200" y="270" text-anchor="middle" font-size="6" font-weight="bold" fill="#6B21A8">Tools</text>
+      <text x="200" y="155" text-anchor="middle" font-size="6" font-weight="bold" fill="#111">LLM</text>
+      <text x="200" y="175" text-anchor="middle" font-size="6" fill="#111">Power</text>
+    </svg>
+  </div>
+</div>
+
+<div class="text-center mt-4 text-lg text-gray-600">
+  <strong>All three must align</strong> • Model intelligence determines reach<br/>
+  But direction is <em>always</em> governed by these three
+</div>
+
+<!--
+The Big Three concept: Every LLM interaction is governed by these three elements. They must work in harmony. The model's intelligence determines how far you can go, but the direction is always set by prompt, context, and tools.
+-->
+
+---
+layout: top-title-two-cols
+color: blue-light
+columns: is-4
+---
+
+:: title ::
+
+# The Big Three: 1️⃣ Prompt
+
+:: left ::
+
+<Admonition title="Instructions to LLM" color="blue-light" width="100%">
+
+**Core Components:**
+
+- Role/Persona
+- Task overview
+- Desired output
+- Verification strategy
+- Process steps
+
+</Admonition>
+
+:: right ::
+
+**Example Prompt Structure:**
+
+```python
+prompt = """
+You are an expert data analyst.
+
+Task: Analyze customer feedback
+Output: JSON summary report
+Process:
+1. Extract key themes
+2. Calculate sentiment
+3. Identify action items
+
+Verify: Ensure all feedback
+is categorized before output.
+"""
+```
+
+<div class="mt-4 text-sm text-gray-500">
+The prompt is your steering wheel - it sets direction but doesn't provide the fuel
+</div>
+
+<!--
+Prompts are the instructions. They tell the LLM what role to play, what task to accomplish, and how to structure its output. Good prompts include verification strategies.
+-->
+
+---
+layout: top-title-two-cols
+color: blue-light
+columns: is-4
+---
+
+:: title ::
+
+# The Big Three: 2️⃣ Context
+
+:: left ::
+
+<Admonition title="Information & State" color="green-light" width="100%">
+
+**What Context Includes:**
+
+- Task-specific data
+- Environment details
+- User information
+- Conversation history
+- System configuration
+
+</Admonition>
+
+:: right ::
+
+**Context Sources:**
+
+```python
+context = {
+    "user_data": fetch_user_profile(),
+    "history": get_conversation(),
+    "environment": {
+        "timestamp": "2024-01-15",
+        "location": "production",
+        "permissions": ["read", "write"]
+    },
+    "relevant_docs": search_knowledge_base()
+}
+```
+
+<div class="mt-4 text-sm text-gray-500">
+Context is your fuel - without it, even perfect prompts go nowhere
+</div>
+
+<!--
+Context provides all the information the LLM needs to complete its task. It's everything about the current situation, user, environment, and relevant data. More context usually means better results.
+-->
+
+---
+layout: top-title-two-cols
+color: blue-light
+columns: is-4
+---
+
+:: title ::
+
+# The Big Three: 3️⃣ Tools
+
+:: left ::
+
+<Admonition title="Extended Capabilities" color="purple-light" width="100%">
+
+**Read Tools:**
+
+- Query database
+- Search web
+- Read files
+- Call APIs
+
+**Write Tools:**
+
+- Update database
+- Write files
+- Send emails
+- Execute code
+
+</Admonition>
+
+:: right ::
+
+**Tool Definition:**
+
+```python
+tools = [
+    {
+        "name": "query_database",
+        "description": "Search customer records",
+        "parameters": {...},
+        "type": "read"
+    },
+    {
+        "name": "send_email",
+        "description": "Send email to user",
+        "parameters": {...},
+        "type": "write"
+    }
+]
+```
+
+<div class="mt-4 text-sm text-gray-500">
+Tools are your engine - they turn LLM decisions into real-world actions
+</div>
+
+<!--
+Tools extend what the LLM can do beyond just generating text. Read tools gather information, write tools take actions. The LLM decides which tools to use and when.
+-->
+
+---
+layout: top-title
+color: blue-light
+---
+
+:: title ::
+
+# The Human Analogy
+
+:: content ::
+
+<div class="text-xl text-center mt-8 mb-6">
+  Think of the LLM as a <strong>competent but inexperienced new hire</strong>
+</div>
+
+<div class="grid grid-cols-3 gap-6">
+
+<Admonition title="📋 Prompt" color="blue-light" width="100%">
+
+- "Here's your role"
+- "This is the task"
+- "Format it like this"
+- "Check your work"
+
+*What you'd tell them in person*
+
+</Admonition>
+
+<Admonition title="📁 Context" color="green-light" width="100%">
+
+- Customer files
+- Meeting notes
+- Company policies
+- Previous examples
+
+*What you'd put on their desk*
+
+</Admonition>
+
+<Admonition title="🔧 Tools" color="purple-light" width="100%">
+
+- Database login
+- Email account
+- File systems
+- API credentials
+
+*What IT would set up for them*
+
+</Admonition>
+
+</div>
+
+<div class="text-center mt-6 text-lg text-gray-600">
+
+**If a human couldn't do it with these three, neither can an LLM**
+
+*at least not reliably*
+
+</div>
+
+<!--
+This is the key insight: LLMs need exactly what a new employee would need. Clear instructions, necessary information, and access to systems. If you're missing any of these three, the task will fail - for both humans and LLMs.
+-->
+
+---
+layout: top-title
+color: blue-light
+---
+
+:: title ::
 
 # What is an Agent?
+
+:: content ::
 
 <div class="text-4xl mt-8">
   <span class="text-blue-500">LLM</span> +
@@ -44,108 +398,84 @@ Welcome to our lecture on building reliable agentic AI systems. Today we'll focu
   <span class="text-purple-500">Loop</span>
 </div>
 
-<div class="mt-8 text-xl text-gray-400">
-Not chatbots, but autonomous systems<br/>
-Simple definition beats complex abstractions
-</div>
+:: default ::
+
+<Admonition color="yellow-light" width="100%"  title="Definition" >
+
+An agent is an LLM running in a loop, with access to tools
+
+</Admonition>
 
 <!--
 An agent is fundamentally just three things combined: an LLM for reasoning, tools to interact with the world, and a loop to keep it running. That's it. Don't overcomplicate it.
 -->
 
 ---
+layout: section
+color: blue-light
+---
 
-# The Cost of Intelligence
+# Principles
 
-<div class="grid grid-cols-3 gap-6 mt-8">
-  <div class="p-4 bg-red-500 bg-opacity-10 rounded">
-    <h3 class="text-red-500 text-2xl mb-2">💸 Cost</h3>
-    <div class="text-lg font-mono">
-      GPT-4o: ~$5/M tokens<br/>
-      1000 calls/day = $150/mo<br/>
-      <span class="text-sm text-gray-400">Adds up fast at scale</span>
-    </div>
-  </div>
-
-  <div class="p-4 bg-orange-500 bg-opacity-10 rounded">
-    <h3 class="text-orange-500 text-2xl mb-2">⏱️ Latency</h3>
-    <div class="text-lg font-mono">
-      First token: 200-500ms<br/>
-      Full response: 2-10s<br/>
-      <span class="text-sm text-gray-400">100x slower than DB query</span>
-    </div>
-  </div>
-
-  <div class="p-4 bg-yellow-500 bg-opacity-10 rounded">
-    <h3 class="text-yellow-500 text-2xl mb-2">🎲 Variance</h3>
-    <div class="text-lg font-mono">
-      Same input → Different output<br/>
-      Format changes randomly<br/>
-      <span class="text-sm text-gray-400">Even at temperature=0</span>
-    </div>
-  </div>
-</div>
-
-<div class="mt-8 p-4 bg-purple-500 bg-opacity-10 rounded text-center">
-  <div class="text-xl font-bold">"Making an LLM API call is the most expensive and dangerous operation in modern software"</div>
-  <div class="text-sm text-gray-400 mt-2">- Dave Ebbelaar, AI Cookbook</div>
-</div>
+Guiding principles
 
 <!--
-This is critical context. Every LLM call costs real money, takes significant time, and produces unpredictable results. This shapes everything about how we build agents.
+
 -->
 
 ---
+layout: top-title
+color: blue-light
+---
+
+:: title ::
 
 # The Evolution Path
 
-<div class="mt-8">
-  <div class="flex items-center justify-between mb-8">
-    <div class="text-center flex-1">
-      <div class="text-3xl mb-2">📝</div>
-      <div class="text-xl font-bold text-blue-500">Deterministic Code</div>
-      <div class="text-sm text-gray-400">If/else, rules, algorithms</div>
-    </div>
-    <div class="text-2xl">→</div>
-    <div class="text-center flex-1">
-      <div class="text-3xl mb-2">🧠</div>
-      <div class="text-xl font-bold text-green-500">Single LLM Call</div>
-      <div class="text-sm text-gray-400">Classification, extraction</div>
-    </div>
-    <div class="text-2xl">→</div>
-    <div class="text-center flex-1">
-      <div class="text-3xl mb-2">🔄</div>
-      <div class="text-xl font-bold text-purple-500">Workflow</div>
-      <div class="text-sm text-gray-400">Predefined paths</div>
-    </div>
-    <div class="text-2xl">→</div>
-    <div class="text-center flex-1">
-      <div class="text-3xl mb-2">🤖</div>
-      <div class="text-xl font-bold text-red-500">Agent</div>
-      <div class="text-sm text-gray-400">Autonomous decisions</div>
-    </div>
-  </div>
+:: content ::
 
-  <div class="grid grid-cols-4 gap-4 mt-8">
-    <div class="text-center">
+<div class="flex items-center justify-between mt-8 mb-8">
+  <div class="text-center flex-1">
+    <div class="text-3xl mb-2">📝</div>
+    <div class="text-xl font-bold text-blue-500">Deterministic Code</div>
+    <div class="text-sm text-gray-400">If/else, rules, algorithms</div>
+    <div class="text-left ml-8 mt-4">
       <div class="text-green-500">✅ Fast</div>
       <div class="text-green-500">✅ Cheap</div>
       <div class="text-green-500">✅ Predictable</div>
       <div class="text-red-500">❌ Limited</div>
     </div>
-    <div class="text-center">
+  </div>
+  <div v-after class="text-2xl">→</div>
+  <div class="text-center flex-1" v-click>
+    <div class="text-3xl mb-2">🧠</div>
+    <div class="text-xl font-bold text-green-500">Single LLM Call</div>
+    <div class="text-sm text-gray-400">Classification, extraction</div>
+    <div class="text-left ml-8 mt-4">
       <div class="text-green-500">✅ Flexible</div>
       <div class="text-yellow-500">⚠️ Slower</div>
       <div class="text-yellow-500">⚠️ Costs $</div>
       <div class="text-green-500">✅ Handles variety</div>
     </div>
-    <div class="text-center">
+  </div>
+  <div v-after class="text-2xl">→</div>
+  <div class="text-center flex-1" v-click>
+    <div class="text-3xl mb-2">🔄</div>
+    <div class="text-xl font-bold text-purple-500">Workflow</div>
+    <div class="text-sm text-gray-400">Predefined paths</div>
+    <div class="text-left ml-8 mt-4">
       <div class="text-green-500">✅ Structured</div>
       <div class="text-green-500">✅ Debuggable</div>
       <div class="text-yellow-500">⚠️ More complex</div>
       <div class="text-green-500">✅ Reliable</div>
     </div>
-    <div class="text-center">
+  </div>
+  <div v-after class="text-2xl">→</div>
+  <div class="text-center flex-1" v-click>
+    <div class="text-3xl mb-2">🤖</div>
+    <div class="text-xl font-bold text-red-500">Agent</div>
+    <div class="text-sm text-gray-400">Autonomous decisions</div>
+    <div class="text-left ml-8 mt-4">
       <div class="text-green-500">✅ Autonomous</div>
       <div class="text-red-500">❌ Expensive</div>
       <div class="text-red-500">❌ Slow</div>
@@ -163,131 +493,17 @@ This is the key insight: there's a progression. Most problems don't need agents.
 -->
 
 ---
-
-# When NOT to Use Agents
-
-<div class="grid grid-cols-2 gap-8 mt-8">
-  <div class="p-6 bg-green-500 bg-opacity-10 rounded">
-    <h3 class="text-green-500 mb-4">✅ Use Deterministic Code For:</h3>
-
-    - **Known business rules** (if age > 18...)
-    - **Mathematical calculations**
-    - **Data transformations** (JSON → CSV)
-    - **State machines** (order workflows)
-    - **Validation logic** (email format)
-    - **CRUD operations**
-
-    <div class="mt-4 p-3 bg-gray-800 rounded text-sm">
-      <span class="text-gray-400">Example:</span> Payment processing, user authentication, data pipelines
-    </div>
-  </div>
-
-  <div class="p-6 bg-purple-500 bg-opacity-10 rounded">
-    <h3 class="text-purple-500 mb-4">🤖 Use Agents Only For:</h3>
-
-    - **Open-ended problems** (research, analysis)
-    - **Creative tasks** (content generation)
-    - **Complex reasoning** (multi-step planning)
-    - **Natural language understanding**
-    - **Dynamic tool selection**
-    - **Iterative refinement needed**
-
-    <div class="mt-4 p-3 bg-gray-800 rounded text-sm">
-      <span class="text-gray-400">Example:</span> Customer support, code generation, research assistants
-    </div>
-  </div>
-</div>
-
-<div class="mt-8 text-center p-4 bg-yellow-500 bg-opacity-10 rounded">
-  💡 **Rule of Thumb**: If you can write it in 100 lines of Python, don't use an agent
-</div>
-
-<!--
-Most developers jump to agents too quickly. If you can solve it deterministically, you should. Agents are for problems you CAN'T solve with regular code.
--->
-
----
-
-# The Uncomfortable Truth About Production
-
-<div class="grid grid-cols-2 gap-8 mt-8">
-  <div>
-    <h3 class="text-blue-500 mb-4">What You See in Tutorials</h3>
-
-    - Complex frameworks everywhere
-    - "Autonomous" agents doing everything
-    - LangChain, CrewAI, AutoGPT
-    - Multi-agent swarms
-  </div>
-
-  <div>
-    <h3 class="text-red-500 mb-4">What's Actually in Production</h3>
-
-    - Custom building blocks
-    - Mostly deterministic code
-    - Strategic LLM calls only
-    - Simple, debuggable systems
-  </div>
-</div>
-
-<div class="mt-12 p-4 bg-yellow-500 bg-opacity-10 rounded">
-💡 **Key Insight**: Most successful AI applications are built with custom building blocks, not frameworks
-</div>
-
-<!--
-There's a huge gap between what you see in demos and what actually works in production. The frameworks aren't being used. Teams build custom solutions with simple, composable patterns.
--->
-
----
-
-# LLM Calls: Expensive and Dangerous
-
-```python
-# The most expensive operation in modern software
-response = client.chat.completions.create(
-    model="gpt-4o",
-    messages=[...],
-    temperature=0.7  # Probabilistic outputs!
-)
-```
-
-<div class="grid grid-cols-3 gap-6 mt-8">
-  <div class="p-4 bg-red-500 bg-opacity-10 rounded">
-    <h4 class="text-red-500">💸 Cost</h4>
-    <p class="text-sm mt-2">Every call costs money</p>
-  </div>
-
-  <div class="p-4 bg-orange-500 bg-opacity-10 rounded">
-    <h4 class="text-orange-500">⏱️ Latency</h4>
-    <p class="text-sm mt-2">Seconds, not milliseconds</p>
-  </div>
-
-  <div class="p-4 bg-yellow-500 bg-opacity-10 rounded">
-    <h4 class="text-yellow-500">🎲 Non-deterministic</h4>
-    <p class="text-sm mt-2">Different outputs each time</p>
-  </div>
-</div>
-
-<div class="mt-8 text-xl text-center text-gray-400">
-Only use when deterministic code fails
-</div>
-
-<!--
-LLM API calls are the most expensive and dangerous operation in modern software. They cost money, they're slow, and they're unpredictable. Use them strategically, not everywhere.
--->
-
----
-layout: two-cols-title
+layout: top-title-two-cols
+color: blue-light
 ---
 
 :: title ::
 
 # Workflows vs Agents
 
-::left::
+:: left ::
 
-<div class="mt-8">
-  <h3 class="text-blue-500 mb-4">Workflows</h3>
+## Workflows
 
 - **Predefined code paths**
 - You control the flow
@@ -302,30 +518,32 @@ else:
     response = answer_question(msg)
 ```
 
-</div>
+:: right ::
 
-::right::
+<v-click>
 
-<div class="mt-8">
-  <h3 class="text-purple-500 mb-4">Agents</h3>
+## Agents
 
 - **LLM controls the process**
 - Dynamic decision making
 - Can call tools autonomously
 - Flexible but unpredictable
 
-  ```python
-  # Agent example
-  while not done:
-      action = llm.decide_action()
-      result = execute(action)
-      done = llm.is_complete(result)
-  ```
+```python
+# Agent example
+while not done:
+    action = llm.decide_action()
+    result = execute(action)
+    done = llm.is_complete(result)
+```
 
-</div>
+</v-click>
+:: default ::
 
-<div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center">
-  <div class="text-xl text-gray-400">Start with workflows, evolve to agents when needed</div>
+<div v-click class="text-xl text-gray-400 text-center">
+
+Start with workflows, evolve to agents when needed
+
 </div>
 
 <!--
@@ -333,492 +551,528 @@ Understanding this distinction is crucial. Workflows are predictable - you defin
 -->
 
 ---
+layout: top-title-two-cols
+color: blue-light
+columns: is-6
+---
 
-# Context Engineering > Prompt Engineering
+:: title ::
 
-<div class="grid grid-cols-2 gap-8 mt-8">
-  <div>
-    <h3 class="text-gray-500 mb-4">Old Way: Prompt Engineering</h3>
+# The "Secret" About Frameworks
 
-```python
-prompt = """You are an expert assistant.
-Please help the user with their request.
-Be concise and helpful."""
+:: left ::
 
-response = llm(prompt + user_input)
-```
+<v-click>
 
-Static, limited, hope for the best
-  </div>
+## What You See in Tutorials
 
-  <div>
-    <h3 class="text-green-500 mb-4">New Way: Context Engineering</h3>
+- Complex frameworks everywhere
+- "Autonomous" agents doing everything
+- LangChain, CrewAI, AutoGPT
+- Multi-agent swarms
 
-```python
-context = {
-    "user_history": get_user_history(),
-    "relevant_docs": search(user_input),
-    "current_time": datetime.now(),
-    "user_preferences": load_preferences()
-}
+</v-click>
 
-response = llm(build_prompt(context))
-```
+:: right ::
 
-Dynamic, comprehensive, reliable
-  </div>
-</div>
+<v-click>
 
-<div class="mt-8 text-center text-xl">
-  <span class="text-purple-500 font-bold">Quality of context determines success</span>
-</div>
+## What's Actually in Production
+
+- Custom building blocks
+- Mostly deterministic code
+- Strategic LLM calls only
+- Simple, debuggable systems
+
+</v-click>
+
+:: default ::
+
+<Admonition v-click color="yellow-light" width="100%">
+
+💡 **Key Insight**: Most successful AI applications are built with custom building blocks, not frameworks
+
+</Admonition>
 
 <!--
-The shift from prompt engineering to context engineering is fundamental. It's not about crafting the perfect prompt - it's about providing the right information at the right time.
+So you think you need agents? That's great! you must be on to something really valuable.
+
+Another question is what framework shoudl should you use?
+
+There's a huge gap between what you see in demos and what actually works in production. The frameworks aren't being used. Teams build custom solutions with simple, composable patterns.
 -->
 
 ---
+layout: top-title
+color: blue-light
+---
 
-# Context Engineering: The Right Information
+:: title ::
 
-```python
-def build_context(user_query: str, session_id: str) -> dict:
-    """Gather ALL relevant information for the LLM"""
+# The Framework Tradeoff for Production
 
-    return {
-        # User context
-        "user_profile": load_user_profile(session_id),
-        "conversation_history": get_recent_messages(session_id, limit=10),
-        "user_preferences": get_preferences(session_id),
+:: content ::
 
-        # Domain context
-        "relevant_documents": vector_search(user_query, top_k=5),
-        "business_rules": load_business_rules(),
-        "current_state": get_system_state(),
+<div class="text-xl text-center mb-6 text-red-500 font-bold">
 
-        # Temporal context
-        "timestamp": datetime.now().isoformat(),
-        "timezone": get_user_timezone(session_id),
-        "business_hours": is_business_hours(),
+⚠️ Build without frameworks first
 
-        # Constraints
-        "max_response_length": 500,
-        "allowed_actions": get_user_permissions(session_id),
-        "compliance_rules": load_compliance_requirements()
-    }
-```
-
-<div class="mt-6 text-center text-lg text-gray-400">
-  More context = Better decisions = Fewer hallucinations
 </div>
 
+<div class="text-lg mb-6">
+
+Only consider frameworks after you:
+
+</div>
+
+- Fully understand your system's behavior
+- Have proven your approach works
+- Need production-grade infrastructure at scale
+
+<Admonition v-click title="🔑 Key Takeaway" color="yellow-light" width="100%">
+
+**Frameworks are for infrastructure, not logic.** They excel at observability, monitoring, and scaling - but only adopt them after you've mastered the fundamentals. Premature abstraction kills understanding.
+
+</Admonition>
+
 <!--
-Context engineering is about gathering ALL relevant information. The more context you provide, the better the LLM can reason about the problem and provide accurate responses.
+The real value of frameworks isn't in agent logic - it's in production infrastructure. But here's the critical point: you must build without them first. Only when you fully understand your system should you add framework abstractions for production needs.
 -->
 
 ---
-
-# Context Engineering: Tool Documentation
-
-<div class="grid grid-cols-2 gap-8 mt-8">
-  <div>
-    <h3 class="text-red-500 mb-4">❌ Poor Tool Documentation</h3>
-
-```python
-tools = [{
-    "name": "search",
-    "description": "Search for stuff",
-    "parameters": {
-        "q": {"type": "string"}
-    }
-}]
-```
-
-LLM doesn't know:
-- What to search for
-- What format to expect
-- When to use this tool
-- What 'q' means
-
-  </div>
-
-  <div>
-    <h3 class="text-green-500 mb-4">✅ Rich Tool Documentation</h3>
-
-```python
-tools = [{
-    "name": "search_knowledge_base",
-    "description": """Search internal docs.
-    Use for: technical questions, policies
-    Returns: Top 5 relevant documents
-    Example: 'error handling python'""",
-    "parameters": {
-        "query": {
-            "type": "string",
-            "description": "Search terms",
-            "examples": ["API error", "login"]
-        },
-        "doc_type": {
-            "type": "string",
-            "enum": ["policy", "technical", "faq"],
-            "description": "Filter by type"
-        }
-    }
-}]
-```
-
-  </div>
-</div>
-
-<div class="mt-8 p-4 bg-blue-500 bg-opacity-10 rounded text-center">
-  💡 **Key Insight**: LLMs perform better with detailed tool documentation - treat them like new developers
-</div>
-
-<!--
-Tool documentation is critical. The LLM needs to understand not just what a tool does, but when to use it, what to expect, and how to format inputs. Think of it as onboarding a new developer.
--->
-
+layout: top-title-two-cols
+color: blue-light
 ---
 
-# The 7 Fundamental Building Blocks
+:: title ::
 
-<div class="grid grid-cols-2 gap-4 mt-6">
-  <div class="p-4 bg-red-500 bg-opacity-10 rounded">
-    <h3 class="text-red-500">1. Control 🚦</h3>
-    <p class="text-sm">Deterministic routing (use first!)</p>
-    <p class="text-xs text-green-400 mt-1">💰 Free | ⚡ Instant</p>
-  </div>
+# Tools: Fewer is Better
 
-  <div class="p-4 bg-yellow-500 bg-opacity-10 rounded">
-    <h3 class="text-yellow-500">2. Validation ✓</h3>
-    <p class="text-sm">Structured output enforcement</p>
-    <p class="text-xs text-green-400 mt-1">💰 Cheap | ⚡ Fast</p>
-  </div>
+:: left ::
 
-  <div class="p-4 bg-orange-500 bg-opacity-10 rounded">
-    <h3 class="text-orange-500">3. Recovery 🔄</h3>
-    <p class="text-sm">Error handling and retries</p>
-    <p class="text-xs text-green-400 mt-1">💰 Free | ⚡ Instant</p>
-  </div>
-
-  <div class="p-4 bg-green-500 bg-opacity-10 rounded">
-    <h3 class="text-green-500">4. Memory 💾</h3>
-    <p class="text-sm">Conversation state persistence</p>
-    <p class="text-xs text-yellow-400 mt-1">💰 Storage cost | ⚡ Fast</p>
-  </div>
-
-  <div class="p-4 bg-indigo-500 bg-opacity-10 rounded">
-    <h3 class="text-indigo-500">5. Feedback 👤</h3>
-    <p class="text-sm">Human oversight workflows</p>
-    <p class="text-xs text-yellow-400 mt-1">💰 Human time | ⚡ Variable</p>
-  </div>
-
-  <div class="p-4 bg-purple-500 bg-opacity-10 rounded">
-    <h3 class="text-purple-500">6. Tools 🔧</h3>
-    <p class="text-sm">External system integrations</p>
-    <p class="text-xs text-orange-400 mt-1">💰 API costs | ⚡ Network latency</p>
-  </div>
-
-  <div class="p-4 bg-blue-500 bg-opacity-10 rounded">
-    <h3 class="text-blue-500">7. Intelligence 🧠</h3>
-    <p class="text-sm">LLM processing (use last!)</p>
-    <p class="text-xs text-red-400 mt-1">💰 Expensive | ⚡ Slow (2-10s)</p>
-  </div>
-</div>
-
-<div class="mt-6 text-center text-gray-400">
-  Start with cheap/fast blocks → Add expensive blocks only when needed
-</div>
-
-<!--
-Notice the reordering: Control comes first (it's free!), Intelligence comes last (it's expensive!). This reflects the reality of building production systems - exhaust deterministic options before using LLMs.
--->
-
----
-
-# Building Block 1: Control (Start Here!)
+## ❌ Too Many Tools
 
 ```python
-def route_request(user_input: str):
-    """Deterministic routing - don't let LLM decide everything"""
-
-    # Use LLM ONLY for classification
-    intent = classify_intent(user_input)
-
-    # Regular code handles ALL routing logic
-    if intent == "complaint":
-        return handle_complaint(user_input)
-    elif intent == "technical":
-        return technical_support(user_input)
-    elif intent == "billing":
-        return billing_system(user_input)
-    else:
-        return general_response(user_input)
-```
-
-<div class="grid grid-cols-2 gap-8 mt-8">
-  <div class="text-green-500">
-    ✅ **Use LLMs for**: Classification, understanding intent
-  </div>
-  <div class="text-red-500">
-    ❌ **Use code for**: Routing, business logic, control flow
-  </div>
-</div>
-
-<div class="mt-6 p-3 bg-blue-500 bg-opacity-10 rounded text-center">
-  💡 **90% of "AI" logic should be regular code** - LLMs are just for the 10% you can't code
-</div>
-
-<!--
-Control is your first building block because it's free and deterministic. Use regular code for everything you can. Only use LLMs for what code can't handle - like understanding natural language.
--->
-
----
-
-# Building Block 2: Memory
-
-```python
-# Without memory - LLM forgets everything
-joke = ask_llm("Tell me a joke")
-followup = ask_llm("What was my previous question?")  # ❌ No idea!
-
-# With memory - pass conversation history
-messages = [
-    {"role": "user", "content": "Tell me a joke"},
-    {"role": "assistant", "content": joke},
-    {"role": "user", "content": "What was my previous question?"}
+tools = [
+    "send_slack_message",
+    "send_teams_message",
+    "send_discord_message",
+    "send_email",
+    "send_sms",
+    "post_to_twitter",
+    # 39 more specific tools...
 ]
-response = client.chat.completions.create(
-    model="gpt-4o",
-    messages=messages  # ✅ Full context
-)
 ```
 
-<div class="mt-8 text-xl text-center text-gray-400">
-  LLMs are stateless - memory is just passing conversation history
-</div>
+**Problem:** LLM confused about which to use
+
+:: right ::
+
+<v-click>
+
+## ✅ General Tools
+
+```python
+tools = [
+    "send_message",  # handles all platforms
+    "read_data",     # all data sources
+    "write_data",    # all outputs
+    "execute_code",  # general compute
+    "search"         # all search needs
+]
+```
+
+**Better:** LLM can easily pick the right one
+
+</v-click>
+
+:: default ::
+
+<Admonition v-click title="🔑 Key Takeaway" color="yellow-light" width="100%">
+
+**Swiss Army Knife Principle:** A human with 45 specialized screwdrivers would waste time choosing. But with one adjustable screwdriver, they get to work immediately.
+
+</Admonition>
 
 <!--
-LLMs don't remember anything between calls. Memory is just manually passing the conversation history each time. It's state management, like in any web app.
+Just like humans, LLMs perform better with fewer, more general tools. Think Swiss Army knife, not a garage full of specialized equipment. Documentation quality matters more than quantity.
 -->
 
 ---
+layout: top-title-two-cols
+color: blue-light
+columns: is-6
+---
 
-# Building Block 3: Tools
+:: title ::
 
-```python
-tools = [{
-    "type": "function",
-    "function": {
-        "name": "get_weather",
-        "description": "Get current weather for a location",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "location": {"type": "string"},
-                "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]}
-            }
-        }
-    }
-}]
+# Enter MCP: A Standard for Tools & Context
 
-# LLM decides: "I need to call get_weather for Paris"
-response = client.chat.completions.create(
-    model="gpt-4o",
-    messages=messages,
-    tools=tools
-)
-```
+:: left ::
 
-<div class="mt-6 text-center text-xl">
-  Move beyond text generation → Actually do things
-</div>
+<v-click>
+
+## What is MCP?
+
+- **Model Context Protocol** by Anthropic
+- Open standard for LLM integrations
+- Connects LLMs to external systems
+- Packages tools, prompts, and resources
+
+<strong>Key insight:</strong> Write once, use everywhere
+
+</v-click>
+
+:: right ::
+
+<v-click>
+
+## Why It Matters
+
+- **Cross-provider compatible**: OpenAI, Claude, Local, etc.
+- **Solves the "too many tools" problem**: organized into servers, namespacing, discovery
+- **Production-ready**: error handling, authentication
+
+</v-click>
+
+:: default ::
+
+<Admonition v-click title="🔑 Key Takeaway" color="yellow-light" width="100%">
+
+**MCP is infrastructure, not logic:** It standardizes how tools connect to LLMs, but you still control what those tools do. Think USB standard for AI tools.
+
+</Admonition>
 
 <!--
-Tools let your LLM interact with the world - call APIs, query databases, control systems. The LLM decides what to call and provides the arguments.
+MCP addresses the exact problem we just discussed - tool proliferation and organization. It's not another framework trying to control your agent logic. It's a protocol that standardizes how tools and context connect to LLMs, regardless of provider.
 -->
 
 ---
+layout: top-title-two-cols
+color: blue-light
+columns: is-6
+---
 
-# Building Block 4: Validation
+:: title ::
 
-```python
+# MCP: How It Actually Works
+
+:: left ::
+
+<div class="text-base mb-4">
+  <strong>MCP Server = Tools + Prompts + Resources</strong>
+</div>
+
+```mermaid {scale: 0.65}
+graph LR
+    LLM[Any LLM] --> MCP[MCP Protocol]
+    MCP --> S1[Database<br/>Server]
+    MCP --> S2[File System<br/>Server]
+    MCP --> S3[API<br/>Server]
+
+    style LLM fill:#3B82F6,color:#fff
+    style MCP fill:#16A34A,color:#fff
+    style S1 fill:#8B5CF6,color:#fff
+    style S2 fill:#8B5CF6,color:#fff
+    style S3 fill:#8B5CF6,color:#fff
+```
+
+<div class="text-sm text-gray-400 mt-4">
+One protocol, many servers, any LLM
+</div>
+
+:: right ::
+
+<v-click>
+
+## Real MCP Servers in Production
+
+<div class="ns-c-tight">
+
+- **Obsidian Server**: Search and manage notes, create/edit content
+- **PostgreSQL Server**: Query databases, safe transactions
+- **GitHub Server**: Manage repos and PRs, code search
+- **Slack Server**: Send messages, read channels
+- **Filesystem Server**: Read/write files, navigate directories
+- **AWS Server**: Manage EC2, S3, Lambda resources
+
+</div>
+
+</v-click>
+
+:: default ::
+
+<Admonition v-click title="💡 The Big Win" color="yellow-light" width="100%">
+
+**Community ecosystem:** Instead of everyone building their own Slack integration, one person builds it well, and thousands use it. MCP servers are shareable, composable building blocks. Think npm for AI tools.
+
+</Admonition>
+
+<!--
+This shows MCP's real value: it's not about the code syntax, it's about the ecosystem. MCP creates shareable, reusable integrations that work across all LLM providers. Think npm for AI tools.
+-->
+
+---
+layout: top-title
+color: blue-light
+---
+
+:: title ::
+
+# Memory: Managing Stateless LLMs
+
+:: content ::
+
+```python {0|1-3|5-13|15-19}
+# All LLM calls are stateless - they remember nothing
+response1 = llm("My name is Alice")  # "Nice to meet you, Alice!"
+response2 = llm("What's my name?")    # "I don't know your name" ❌
+
+# Solution: Include conversation history each time
+conversation = [
+    {"role": "user", "content": "My name is Alice"},
+    {"role": "assistant", "content": "Nice to meet you, Alice!"},
+    {"role": "user", "content": "What's my name?"}
+]
+response = llm(conversation)  # "Your name is Alice" ✅
+# API providers optimize this with token caching
+
+# Advanced: Intelligently rewrite to recover from bad states
+if conversation_stuck():
+    conversation = summarize_and_reset(conversation)
+    # Removes unfruitful tangents
+    # Avoids context poisoning
+```
+
+<Admonition v-click title="🔑 Key Takeaway" color="yellow-light" width="100%">
+
+**Memory gives you control:** Token caching makes it cheaper, editing history guides behavior, and you can reset from bad states without losing everything.
+
+</Admonition>
+
+<!--
+Memory isn't built-in - it's just passing conversation history. This gives you power: you can edit history to recover from bad states or guide the conversation back on track.
+-->
+
+---
+layout: top-title
+color: blue-light
+---
+
+:: title ::
+
+# Control Flow: Structured Decision Making
+
+:: content ::
+
+```python {0|1-7|9-22|24-27}{maxHeight:'320px'}
 from pydantic import BaseModel
+from typing import Literal
 
-class TaskOutput(BaseModel):
-    task: str
-    priority: int
-    deadline: datetime
+class NextStep(BaseModel):
+    action: Literal["search", "analyze", "summarize", "complete"]
+    reason: str  # WHY the model chose this
+    confidence: float
 
-# Force structured output
-response = client.beta.chat.completions.parse(
-    model="gpt-4o",
-    messages=messages,
-    response_format=TaskOutput  # ✅ Guaranteed structure
+# Instead of direct tool calls, get structured decisions
+response = llm.create(
+    model="gpt-4",
+    response_format=NextStep,
+    messages=[{"role": "user", "content": user_input}]
 )
 
-task = response.parsed  # Type-safe, validated
+decision = response.parsed
+print(f"Action: {decision.action}")
+print(f"Reason: {decision.reason}")  # Logged for analysis
+print(f"Confidence: {decision.confidence}")
+
+# Route based on structured output
+execute_action(decision.action)
+
+# Later: Analyze logs to understand patterns
+# "Why does the model always choose 'search' for pricing questions?"
+# Use insights to optimize prompts
 ```
 
-<div class="mt-8 p-4 bg-yellow-500 bg-opacity-10 rounded">
-  <h3 class="text-yellow-500">Why This Matters</h3>
+<Admonition v-click title="🔑 Key Takeaway" color="yellow-light" width="100%">
 
-- LLMs are probabilistic → outputs vary
-- Downstream code needs consistent structure
-- Validation + retry = reliability
+**Visibility drives optimization:** When you know WHY the model made each decision, you can debug problems and optimize prompts based on real patterns.
 
-</div>
+</Admonition>
 
 <!--
-Validation ensures your LLM outputs match expected schemas. This is critical for reliability - you can't build robust systems on unpredictable outputs.
+Structured control flow with reasoning gives you visibility into the model's decision process. This is invaluable for debugging and optimization - you can see patterns in why certain decisions are made.
 -->
 
 ---
+layout: top-title
+color: blue-light
+---
 
-# Building Block 5: Control
+:: title ::
 
-```python
-def route_request(user_input: str):
-    """Deterministic routing - don't let LLM decide everything"""
+# Guardrails: Protecting Your System
 
-    intent = classify_intent(user_input)  # LLM classifies
+:: content ::
 
-    # Regular code handles routing
-    if intent == "complaint":
-        return handle_complaint(user_input)
-    elif intent == "technical":
-        return technical_support(user_input)
+```python {0|1-10|12-21|23-31}{maxHeight:'320px'}
+# Input guardrails - check user input
+@input_guardrail
+async def validate_input(text: str):
+    # Prevent abuse
+    if is_off_topic(text):
+        raise ValidationError("Please stay on topic about our products")
+
+    # Block harmful content
+    if contains_hate_speech(text) or is_prompt_injection(text):
+        raise SecurityError("Invalid input detected")
+
+# Output guardrails - check model outputs
+@output_guardrail
+async def validate_output(text: str):
+    # Protect brand
+    if contains_competitor_recommendations(text):
+        return regenerate_with_constraints(text)
+
+    # Ensure appropriateness
+    if not appropriate_for_audience(text):
+        return sanitize_response(text)
+
+# Apply to your agent
+@with_guardrails(
+    input=[validate_input],
+    output=[validate_output]
+)
+async def safe_agent(user_input: str):
+    # Agent only runs if input passes checks
+    # Output automatically validated before return
+    return await agent.process(user_input)
+```
+
+<Admonition v-click title="🔑 Key Takeaway" color="yellow-light" width="100%">
+
+**Guardrails are your bouncers:** They prevent abuse (cost control), protect your brand (safety), and keep the system on task.
+
+</Admonition>
+
+<!--
+Guardrails are essential in production. They protect against abuse, maintain brand safety, and keep the system focused on its intended purpose. Think of them as bouncers for your AI system.
+-->
+
+---
+layout: top-title
+color: blue-light
+---
+
+:: title ::
+
+# Feedback: Human in the Loop
+
+:: content ::
+
+```python {0|1-8|10-18|20-29}{maxHeight:'320px'}
+# Use Python's input() to keep humans in control
+def execute_with_confirmation(action: str, details: dict):
+    """Request human approval for critical actions"""
+
+    print(f"\n🤖 AI wants to: {action}")
+    print(f"Details: {json.dumps(details, indent=2)}")
+
+    confirm = input("\nProceed? (y/n): ")
+
+    if confirm.lower() == 'y':
+        result = execute_action(action, details)
+        log_decision(action, details, approved=True)
+        return result
     else:
-        return general_response(user_input)
+        log_decision(action, details, approved=False)
+        return {"status": "cancelled", "reason": "user_declined"}
+
+# Real examples where feedback is critical
+critical_actions = [
+    "UPDATE database SET price = 0",  # Database changes
+    "SEND email TO all_customers",    # Mass communications
+    "EXECUTE trade BUY 1000 AAPL",   # Financial transactions
+    "DELETE user_account WHERE id=123" # Irreversible actions
+]
+
+for action in critical_actions:
+    # Always get confirmation before executing
+    execute_with_confirmation(action, parse_action(action))
 ```
 
-<div class="grid grid-cols-2 gap-8 mt-8">
-  <div class="text-green-500">
-    ✅ **Use LLMs for**: Classification, understanding intent
-  </div>
-  <div class="text-red-500">
-    ❌ **Use code for**: Routing, business logic, control flow
-  </div>
-</div>
+<Admonition v-click title="🔑 Key Takeaway" color="yellow-light" width="100%">
+
+**Stay in control:** Use simple features like `input()` to pause before database updates, email sends, or financial transactions. Prevention beats recovery.
+
+</Admonition>
 
 <!--
-You don't want your LLM making every decision. Use it for what it's good at - understanding and classification. Use regular code for control flow.
+Human feedback keeps you in control. Use simple language features like Python's input() to pause and request confirmation before critical actions. This prevents costly mistakes and maintains human oversight.
 -->
 
 ---
-
-# Building Block 6: Recovery
-
-```python
-async def resilient_llm_call(prompt: str, max_retries: int = 3):
-    """Things WILL fail - be ready"""
-
-    for attempt in range(max_retries):
-        try:
-            response = await llm.complete(prompt)
-            if validate_response(response):
-                return response
-        except RateLimitError:
-            await asyncio.sleep(2 ** attempt)  # Exponential backoff
-        except APIError as e:
-            log_error(e)
-            if attempt == max_retries - 1:
-                return FALLBACK_RESPONSE
-
-    return "I'm having trouble right now. Please try again."
-```
-
-<div class="mt-8 text-center">
-  <div class="text-2xl text-red-500 mb-4">Things that WILL go wrong:</div>
-  <div class="text-lg text-gray-400">APIs down • Rate limits • Nonsense outputs • Timeouts</div>
-</div>
-
-<!--
-Production systems fail. APIs go down, rate limits hit, LLMs return garbage. Your system must handle these gracefully with retries, fallbacks, and clear error messages.
--->
-
+layout: section
+color: blue-light
 ---
 
-# Building Block 7: Feedback
+# Patterns
 
-```python
-def process_with_approval(user_request: str):
-    """Some decisions need human oversight"""
-
-    # Generate response
-    draft = llm.generate_email(user_request)
-
-    # Human review required
-    print(f"Draft email:\n{draft}\n")
-    approval = input("Send this email? (y/n): ")
-
-    if approval.lower() == 'y':
-        send_email(draft)
-        return "Email sent successfully"
-    else:
-        return "Email cancelled by user"
-```
-
-<div class="mt-8 p-4 bg-purple-500 bg-opacity-10 rounded">
-  <h3 class="text-purple-500 mb-2">When to Add Human Oversight</h3>
-
-- High-stakes decisions (payments, emails to customers)
-- Content generation that represents your brand
-- Actions that can't be undone
-- Complex judgments requiring context
-
-</div>
-
-<!--
-Not everything should be fully automated. Some decisions are too important or complex. Build in approval workflows where humans review before execution.
--->
-
----
-layout: center
----
-
-# Common Agentic Patterns
-
-<div class="text-2xl text-gray-400 mt-8">
 From simple to complex
-</div>
 
 <!--
 Now let's look at common patterns built from these blocks. These are proven architectures used in production systems.
 -->
 
 ---
+layout: top-title
+color: blue-light
+---
+
+:: title ::
 
 # Pattern 1: Sequential Workflows
 
-```python
-async def sequential_story_generation(topic: str):
-    """Each step builds on the previous output"""
+:: content ::
 
-    # Step 1: Generate outline
-    outline = await generate_outline(topic)
+```mermaid
+graph LR
+    In((In)) --> LLM1[LLM Call 1]
+    LLM1 -->|Output 1| Gate{Gate}
+    Gate -->|Pass| LLM2[LLM Call 2]
+    Gate -.->|Fail| Exit([Exit])
+    LLM2 -->|Output 2| LLM3[LLM Call 3]
+    LLM3 --> Out((Out))
 
-    # Step 2: Validate outline quality
-    if not is_quality_outline(outline):
-        outline = await improve_outline(outline)
+    style In fill:#B91C1C,color:#fff
+    style Out fill:#B91C1C,color:#fff
+    style LLM1 fill:#16A34A,color:#fff
+    style LLM2 fill:#16A34A,color:#fff
+    style LLM3 fill:#16A34A,color:#fff
+    style Gate fill:#4B5563,color:#fff
+    style Exit fill:#7F1D1D,color:#fff
+```
 
-    # Step 3: Write the story
-    story = await write_story(outline)
+```python {0|3|5-7|8-10|12-14|*}
+async def sequential_with_gates(user_input):
+    # LLM Call 1: Process input
+    output1 = await llm_extract_data(user_input)
 
-    # Step 4: Polish final output
-    final = await polish_story(story)
+    # Gate: Validate quality
+    if not validate_extraction(output1):
+        return handle_error()  # Exit on fail
+
+    # LLM Call 2: Enhance data (pass path)
+    output2 = await llm_enhance(output1)
+
+    # LLM Call 3: Generate final output
+    final = await llm_generate(output2)
 
     return final
 ```
 
-<div class="mt-8">
-  <div class="text-xl mb-4">Use Cases:</div>
-
-- Document generation (reports, articles)
-- Data transformation pipelines
-- Multi-stage content creation
-- Step-by-step problem solving
-
+<div class="text-center text-base text-gray-400">
+Chain LLM calls • Validate between steps • Exit early on failure
 </div>
 
 <!--
@@ -826,107 +1080,173 @@ Sequential workflows chain LLM calls where each step processes the output of the
 -->
 
 ---
+layout: top-title-two-cols
+color: blue-light
+---
+
+:: title ::
 
 # Pattern 2: Routing and Handoffs
 
-```python
-# Main router agent
-router_agent = Agent(
-    instructions="Route to the appropriate specialist",
-    handoffs=[spanish_agent, french_agent, technical_agent]
-)
+:: left ::
 
-# Specialized agents
-spanish_agent = Agent(
-    instructions="You only speak Spanish",
-    description="Handles Spanish language requests"
-)
+```mermaid
+graph LR
+    In((In)) --> Router[LLM Call Router]
+    Router -.-> LLM1[LLM Call 1]
+    Router -.-> LLM2[LLM Call 2]
+    Router -.-> LLM3[LLM Call 3]
+    LLM1 -.-> Out((Out))
+    LLM2 -.-> Out
+    LLM3 -.-> Out
 
-technical_agent = Agent(
-    instructions="You are a technical expert",
-    description="Handles technical questions"
-)
-
-# Usage
-async def handle_request(message):
-    agent = router_agent
-    while True:
-        result = await agent.run(message)
-        if result.handoff:
-            agent = result.handoff  # Specialist takes over
-        else:
-            return result
+    style In fill:#B91C1C,color:#fff
+    style Out fill:#B91C1C,color:#fff
+    style Router fill:#16A34A,color:#fff
+    style LLM1 fill:#16A34A,color:#fff
+    style LLM2 fill:#16A34A,color:#fff
+    style LLM3 fill:#16A34A,color:#fff
 ```
 
-<!--
-Routing patterns use a front-line agent to classify and hand off to specialists. The specialist "takes over" the conversation from that point.
--->
+:: right ::
 
----
+```python {4|6-14|*}
+# Router decides which specialist to use
+async def routing_agent(user_input):
+    # Router analyzes request
+    router = await llm_router(user_input)
 
-# Pattern 3: Tool Use
-
-```python
-def weather_agent():
-    """Agent that can check weather and make recommendations"""
-
-    tools = [
-        get_current_weather,
-        get_forecast,
-        search_activities
-    ]
-
-    # User: "Should I go hiking tomorrow in Denver?"
-
-    # Agent thinks: Need weather info first
-    weather = get_forecast("Denver", "tomorrow")
-
-    # Agent thinks: Weather looks good, find trails
-    trails = search_activities("hiking trails Denver")
-
-    # Agent responds with recommendation
-    return f"Tomorrow looks great for hiking! {weather}. Try {trails[0]}"
+    # Route to appropriate specialist
+    if router.intent == "spanish":
+        return await llm_spanish_expert(user_input)
+    elif router.intent == "technical":
+        return await llm_technical_expert(user_input)
+    elif router.intent == "sales":
+        return await llm_sales_expert(user_input)
+    else:
+        return await llm_general(user_input)
 ```
 
-<div class="mt-8 text-center">
-  <div class="text-xl text-blue-500">LLM decides which tools + Tool provides real data</div>
-  <div class="text-lg text-gray-400 mt-2">= Intelligent actions</div>
+:: default ::
+
+<div class="mt-4 text-center text-base text-gray-400">
+
+Router analyzes • Selects specialist • Hands off control
+
+<span class=text-xs>Dotted line represents optional/potential call</span>
+
 </div>
 
 <!--
-Tool use patterns let the LLM decide what external resources it needs. It's not just generating text - it's gathering information and taking actions.
+
+Routing patterns use a front-line agent to classify and hand off to specialists. The specialist "takes over" the conversation from that point.
+
+dotted lines represents calls that *might* happen, not that will happen deterministically
+
 -->
 
 ---
+layout: top-title-two-cols
+color: blue-light
+---
+
+:: title ::
+
+# Pattern 3: Parallelization
+
+:: left ::
+
+```mermaid
+graph LR
+    In((In)) --> LLM1[LLM Call 1]
+    In --> LLM2[LLM Call 2]
+    In --> LLM3[LLM Call 3]
+    LLM1 --> Agg[Aggregator]
+    LLM2 --> Agg
+    LLM3 --> Agg
+    Agg --> Out((Out))
+
+    style In fill:#B91C1C,color:#fff
+    style Out fill:#B91C1C,color:#fff
+    style LLM1 fill:#16A34A,color:#fff
+    style LLM2 fill:#16A34A,color:#fff
+    style LLM3 fill:#16A34A,color:#fff
+    style Agg fill:#4B5563,color:#fff
+```
+
+:: right ::
+
+```python {0|3-8|10-12|*}
+# Run multiple LLM calls in parallel
+async def parallel_analysis(user_input):
+    # Launch all calls simultaneously
+    results = await asyncio.gather(
+        llm_sentiment_analysis(user_input),
+        llm_entity_extraction(user_input),
+        llm_topic_classification(user_input)
+    )
+
+    # Aggregate results
+    aggregated = combine_insights(results)
+    return aggregated
+```
+
+:: default ::
+
+<div class="mt-4 text-center text-base text-gray-400">
+Launch simultaneously • Gather results • Combine insights
+</div>
+
+<!--
+Parallelization patterns run multiple LLM calls at the same time, dramatically reducing latency. Great for independent analyses that can be combined.
+-->
+
+---
+layout: top-title
+color: blue-light
+---
+
+:: title ::
 
 # Pattern 4: Reflection and Iteration
 
-```python
-async def reflective_generation(request: str, max_attempts: int = 5):
-    """Generate, evaluate, and improve iteratively"""
+:: content ::
 
-    for attempt in range(max_attempts):
-        # Generate
-        output = await generator_agent.run(request)
+```mermaid
+graph LR
+    In((In)) --> Gen[LLM Call Generator]
+    Gen -->|SOLUTION| Eval[LLM Call Evaluator]
+    Eval -->|Accepted| Out((Out))
+    Eval -->|REJECTED + FEEDBACK| Gen
 
-        # Evaluate
-        evaluation = await evaluator_agent.evaluate(output)
-
-        if evaluation.score >= 0.8:
-            return output
-
-        # Provide feedback for next iteration
-        request = f"""
-        Previous output: {output}
-        Feedback: {evaluation.feedback}
-        Please improve based on feedback.
-        """
-
-    return output  # Return best effort
+    style In fill:#B91C1C,color:#fff
+    style Out fill:#B91C1C,color:#fff
+    style Gen fill:#16A34A,color:#fff
+    style Eval fill:#16A34A,color:#fff
 ```
 
-<div class="mt-6 text-center">
-  <div class="text-xl">🔄 Generate → Evaluate → Improve → Repeat</div>
+```python {0|1-4|5-6|7-15|*}
+async def reflective_generation(request: str, max_iterations: int = 5):
+    """Generate, evaluate, and improve iteratively"""
+
+    for iteration in range(max_iterations):
+        # Generate solution
+        solution = await llm_generator(request)
+
+        # Evaluate quality
+        evaluation = await llm_evaluator(solution)
+
+        if evaluation.accepted:
+            return solution  # Output accepted
+
+        # Use feedback to improve
+        request = f"{request}\nFeedback: {evaluation.feedback}"
+
+    return solution  # Return best effort after max iterations
+```
+
+<div class="text-center text-base text-gray-400">
+Generate solution • Evaluate quality • Iterate until accepted
 </div>
 
 <!--
@@ -934,10 +1254,39 @@ Reflection patterns use one LLM to evaluate another's output. This self-improvem
 -->
 
 ---
+layout: top-title-two-cols
+color: blue-light
+---
+
+:: title ::
 
 # Pattern 5: Planning and Decomposition
 
-```python
+:: left ::
+
+```mermaid
+graph LR
+    In((In)) --> Orch[LLM Call Orchestrator]
+    Orch -.-> LLM1[LLM Call 1]
+    Orch -.-> LLM2[LLM Call 2]
+    Orch -.-> LLM3[LLM Call 3]
+    LLM1 -.-> Synth[Synthesizer]
+    LLM2 -.-> Synth
+    LLM3 -.-> Synth
+    Synth --> Out((Out))
+
+    style In fill:#B91C1C,color:#fff
+    style Out fill:#B91C1C,color:#fff
+    style Orch fill:#16A34A,color:#fff
+    style LLM1 fill:#16A34A,color:#fff
+    style LLM2 fill:#16A34A,color:#fff
+    style LLM3 fill:#16A34A,color:#fff
+    style Synth fill:#16A34A,color:#fff
+```
+
+:: right ::
+
+```python {0|4-6|8-12|14-15|*}
 async def research_with_planning(question: str):
     """Break complex tasks into subtasks"""
 
@@ -957,8 +1306,10 @@ async def research_with_planning(question: str):
     return answer
 ```
 
-<div class="mt-8 p-4 bg-green-500 bg-opacity-10 rounded">
-  Dynamic planning for complex problems where steps aren't known in advance
+:: default ::
+
+<div class="mt-4 text-center text-base text-gray-400">
+Orchestrate plan • Execute subtasks • Synthesize results
 </div>
 
 <!--
@@ -966,28 +1317,76 @@ Planning patterns let the LLM break down complex tasks dynamically. Unlike seque
 -->
 
 ---
+layout: top-title-two-cols
+color: blue-light
+columns: is-6
+---
 
-# Pattern 6: Multi-Agent Collaboration
+:: title ::
 
-```python
-# Only use when truly necessary!
-orchestrator = Agent("Coordinate specialized agents")
-researcher = Agent("Find and analyze information")
-writer = Agent("Create polished content")
-reviewer = Agent("Check quality and accuracy")
+# Pattern 6: Supervisor Architecture
 
-async def collaborative_report(topic: str):
-    # Orchestrator manages the workflow
-    research = await researcher.gather_info(topic)
-    draft = await writer.create_draft(research)
-    feedback = await reviewer.review(draft)
-    final = await writer.revise(draft, feedback)
+:: left ::
 
-    return final
+```mermaid {scale: 0.7}
+graph TB
+    In((In)) --> Sup[Supervisor LLM]
+    Sup -->|Route| A1[Agent 1]
+    Sup -->|Route| A2[Agent 2]
+    Sup -->|Route| A3[Agent 3]
+    A1 -->|Complete| Sup
+    A2 -->|Complete| Sup
+    A3 -->|Complete| Sup
+    Sup -->|Final| Out((Out))
+
+    style In fill:#B91C1C,color:#fff
+    style Out fill:#B91C1C,color:#fff
+    style Sup fill:#4B5563,color:#fff
+    style A1 fill:#16A34A,color:#fff
+    style A2 fill:#16A34A,color:#fff
+    style A3 fill:#16A34A,color:#fff
 ```
 
-<div class="mt-8 p-4 bg-red-500 bg-opacity-10 rounded">
-  ⚠️ **Warning**: Multi-agent systems are complex. Only use when a single agent truly can't handle the task.
+⚠️ **Centralized control, simpler than full network**
+
+:: right ::
+
+```python {0|1-8|10-11|13|14-19|21-27|29}{maxHeight:'280px'}
+class SupervisorSystem:
+    def __init__(self, llm):
+        self.supervisor = llm
+        self.agents = {
+            "research": Agent(llm, "research specialist"),
+            "analysis": Agent(llm, "data analyst"),
+            "writer": Agent(llm, "technical writer")
+        }
+
+    def run(self, task, max_steps=10):
+        state = {"task": task, "results": []}
+
+        for _ in range(max_steps):
+            # Supervisor decides next action
+            decision = self.supervisor.invoke(
+                f"Task: {task}\n"
+                f"Progress: {state['results']}\n"
+                "Which agent should handle next?"
+            )
+
+            if decision["done"]:
+                break
+
+            # Route to chosen agent
+            agent = self.agents[decision["agent"]]
+            result = agent.execute(state)
+            state["results"].append(result)
+
+        return state["results"]
+```
+
+:: default ::
+
+<div class="mt-4 p-3 bg-red-500 bg-opacity-10 rounded text-center">
+⚠️ <strong>Warning</strong>: Complex to debug • Use only when single agent insufficient
 </div>
 
 <!--
@@ -995,807 +1394,185 @@ Multi-agent patterns coordinate specialists for complex tasks. But beware - they
 -->
 
 ---
+layout: top-title-two-cols
+color: blue-light
+columns: is-6
+---
 
-# Lessons from Claude Code: Simplicity Wins
+:: title ::
 
-<div class="grid grid-cols-2 gap-8 mt-6">
-  <div>
-    <h3 class="text-blue-500 mb-4">Architecture Insights</h3>
+# Case Study: Claude Code
 
-- Single main thread (not multi-agent chaos)
-- Simple tools over complex abstractions
-- 50% of calls use cheaper models
-- One main loop with sub-agents max depth 1
+:: left ::
 
-  </div>
+## What is Claude Code?
 
-  <div>
-    <h3 class="text-green-500 mb-4">Tool Design</h3>
+- Anthropic's AI coding assistant
+- Launched October 2024
+- 100K+ developers in first month
+- Works in VS Code, terminal, JetBrains
 
-```python
-# High-frequency → dedicated tool
-tools = [
-    Edit(),    # Used constantly
-    Read(),    # Used constantly
-    Search(),  # Used often
-]
+:: right ::
 
-# Low-frequency → generic bash
-bash("git commit -m 'message'")
-```
+## Core Capabilities
 
-  </div>
-</div>
+- Read, write, edit files
+- Execute terminal commands
+- Web search, web fetch
+- Spawn subagents
 
-<div class="mt-8 text-center p-4 bg-purple-500 bg-opacity-10 rounded">
-  💡 Resist the urge to over-engineer. Good harness for the model + let it cook!
-</div>
+:: default ::
+
+<Admonition color="yellow-light" width="100%"  title="Why it matters" >
+
+Claude Code achieves all this with a **remarkably simple architecture** - proving that complexity isn't necessary for powerful agents.
+
+</Admonition>
 
 <!--
-Claude Code is one of the most successful AI coding assistants. Its secret? Radical simplicity. One thread, simple tools, smart use of cheaper models.
+Claude Code represents a breakthrough in AI-assisted development. What's remarkable isn't just its capabilities, but how it achieves them through architectural simplicity.
 -->
 
 ---
-
-# Production Realities: Real Numbers
-
-<div class="grid grid-cols-2 gap-8 mt-6">
-  <div>
-    <h3 class="text-red-500 mb-4">💰 Cost Reality Check</h3>
-
-    ```python
-    # Real production costs (per 1000 requests)
-    costs = {
-        "gpt-4o": 150,        # $0.15 per request
-        "gpt-3.5-turbo": 20,  # $0.02 per request
-        "claude-3.5": 120,    # $0.12 per request
-        "embedding": 0.50,    # $0.0005 per request
-    }
-
-    # 10K users, 10 requests/day each
-    # = 100K requests/day
-    # = $15,000/day with GPT-4o
-    # = $2,000/day with GPT-3.5
-    ```
-  </div>
-
-  <div>
-    <h3 class="text-orange-500 mb-4">⏱️ Latency Breakdown</h3>
-
-    ```python
-    # Typical response times
-    latencies = {
-        "network_roundtrip": 50,    # ms
-        "first_token": 300,         # ms
-        "full_response": 3000,      # ms (3s)
-        "tool_call": 100,           # ms
-        "total_agent_loop": 5000,   # ms (5s)
-    }
-
-    # User tolerance thresholds
-    # < 1s: Feels instant
-    # 1-3s: Noticeable wait
-    # > 5s: Users get frustrated
-    # > 10s: Users leave
-    ```
-  </div>
-</div>
-
-<div class="mt-6 p-4 bg-yellow-500 bg-opacity-10 rounded text-center">
-  🎯 **Strategy**: Use GPT-4 for complex reasoning, GPT-3.5 for simple tasks, cache aggressively
-</div>
-
-<!--
-These are real numbers from production systems. Cost and latency compound quickly. You need strategies to manage both.
--->
-
+layout: top-title-two-cols
+color: blue-light
+columns: is-6
 ---
 
-# Production Realities: Debugging Agents
+:: title ::
 
-```python
-import logging
-from datetime import datetime
+# Claude Code Architecture: Simplicity Wins
 
-class DebugAgent:
-    def __init__(self, name: str):
-        self.name = name
-        self.trace = []
+:: left ::
 
-    def log_decision(self, decision_type: str, data: dict):
-        """Log every decision point for debugging"""
-        entry = {
-            "timestamp": datetime.now().isoformat(),
-            "agent": self.name,
-            "decision": decision_type,
-            "data": data,
-            "context_size": len(str(data))
-        }
-        self.trace.append(entry)
-        logging.info(f"[{self.name}] {decision_type}: {data.get('reason', '')}")
+## Key Design Decisions
 
-    def export_trace(self) -> str:
-        """Export full decision trace for debugging"""
-        return json.dumps(self.trace, indent=2)
-```
+- **Single main thread** (not multi-agent)
+- **Simple tools** over complex abstractions
+- **One main loop** with sub-agents max depth 1
+- **Smart model routing** (Opus 4.1 vs Haiku 3.5)
 
-<div class="mt-6">
-  <h3 class="text-blue-500 mb-2">Essential Debugging Information:</h3>
-
-  - **Every LLM call** (input, output, tokens used, cost)
-  - **Tool calls** (which tool, parameters, results)
-  - **Decision points** (why agent chose path A vs B)
-  - **Context state** at each step
-  - **Timing information** for performance analysis
+<div class="mt-6 p-3 bg-blue-900 bg-opacity-30 rounded">
+<strong>Result:</strong> Faster, more reliable, easier to debug
 </div>
+
+:: right ::
+
+## Tool Set (13 Total)
+
+- **File Operations**: Read, Write, Edit, MultiEdit, NotebookRead, NotebookEdit
+- **Search & Discovery**: Grep, Glob, WebSearch, WebFetch
+- **Execution & Control**: Bash, Task (sub-agents), TodoWrite
+
+<div class="mt-4 text-sm text-gray-400">
+Simple, focused tools > complex abstractions
+</div>
+
+:: default ::
+
+<Admonition color="yellow-light" width="100%" custom="text-center mt-8">
+
+💡 **Lesson**: Resist over-engineering. Good harness + powerful model = magic
+
+</Admonition>
 
 <!--
-You can't debug what you can't see. Log everything in development, selectively in production. The trace is your lifeline when things go wrong.
--->
-
----
-
-# Building Without Frameworks
-
-```python
-# This is often all you need:
-import openai
-import json
-from typing import Dict, Any
-
-class SimpleAgent:
-    def __init__(self, instructions: str):
-        self.client = openai.OpenAI()
-        self.instructions = instructions
-        self.messages = []
-
-    def run(self, user_input: str) -> str:
-        self.messages.append({"role": "user", "content": user_input})
-
-        response = self.client.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                {"role": "system", "content": self.instructions},
-                *self.messages
-            ]
-        )
-
-        assistant_message = response.choices[0].message.content
-        self.messages.append({"role": "assistant", "content": assistant_message})
-
-        return assistant_message
-```
-
-<div class="mt-6 text-center text-xl text-gray-400">
-  Direct API calls = Full control, easy debugging, no magic
-</div>
-
-<!--
-You don't need LangChain or other frameworks to start. Direct API calls give you full control and understanding of what's happening.
--->
-
----
-
-# The Framework Tradeoff for Production
-
-<div class="grid grid-cols-2 gap-8 mt-6">
-  <div>
-    <h3 class="text-red-500 mb-4">Start Raw (Learning/Prototyping)</h3>
-
-    ```python
-    # Direct API calls
-    response = client.chat.completions.create(...)
-
-    # Manual logging
-    print(f"Called LLM: {response}")
-
-    # Simple error handling
-    try:
-        ...
-    except Exception as e:
-        print(f"Error: {e}")
-    ```
-
-    ✅ Full understanding<br/>
-    ✅ Easy debugging<br/>
-    ❌ Manual everything
-  </div>
-
-  <div>
-    <h3 class="text-green-500 mb-4">Add Framework (Production/Scale)</h3>
-
-    ```python
-    # Automatic observability
-    @trace
-    def agent_step():
-        # Framework handles:
-        # - Distributed tracing
-        # - Metrics collection
-        # - Log aggregation
-        # - Error reporting
-        pass
-    ```
-
-    ✅ Built-in observability<br/>
-    ✅ Production infrastructure<br/>
-    ❌ Abstraction overhead
-  </div>
-</div>
-
-<div class="mt-8 text-center p-4 bg-blue-500 bg-opacity-10 rounded">
-  **Key Insight**: Frameworks shine for infrastructure (logging, tracing, monitoring), not agent logic
-</div>
-
-<!--
-The real value of frameworks isn't in agent logic - it's in production infrastructure. Start raw to understand, adopt frameworks when you need observability at scale.
--->
-
----
-
-# Error Handling and Recovery
-
-```python
-class RobustAgent:
-    async def call_with_fallback(self, prompt: str):
-        strategies = [
-            (self.primary_llm, "gpt-4o"),
-            (self.backup_llm, "gpt-3.5-turbo"),
-            (self.local_llm, "llama-3"),
-            (self.cached_response, None),
-            (self.default_response, None)
-        ]
-
-        for strategy, model in strategies:
-            try:
-                return await strategy(prompt, model)
-            except Exception as e:
-                log_error(f"Failed with {model}: {e}")
-                continue
-
-        return "I'm unable to help right now. Please try again later."
-```
-
-<div class="mt-8 text-2xl text-center">
-  <span class="text-red-500">Expect failure</span> →
-  <span class="text-yellow-500">Plan for it</span> →
-  <span class="text-green-500">Degrade gracefully</span>
-</div>
-
-<!--
-Production systems must handle failures gracefully. Have backup models, cached responses, and clear error messages. Users prefer a degraded experience over no experience.
--->
-
----
-
-# Validation and Guardrails
-
-```python
-# Input guardrails
-@input_guardrail
-async def check_harmful_content(input_text: str):
-    if contains_pii(input_text):
-        raise ValidationError("Please remove personal information")
-
-    if is_prompt_injection(input_text):
-        raise SecurityError("Invalid input detected")
-
-# Output guardrails
-@output_guardrail
-async def validate_response(output: str):
-    if contains_sensitive_data(output):
-        return "[REDACTED]"
-
-    if not appropriate_for_audience(output):
-        return regenerate_with_constraints(output)
-
-    return output
-
-# Usage
-@with_guardrails(input=[check_harmful_content],
-                 output=[validate_response])
-async def safe_agent_call(user_input: str):
-    return await agent.process(user_input)
-```
-
-<!--
-Guardrails protect your system and users. Input guardrails catch harmful requests. Output guardrails ensure responses are safe and appropriate.
--->
-
----
-
-# When NOT to Use Agents
-
-<div class="grid grid-cols-2 gap-8 mt-8">
-  <div class="p-6 bg-red-500 bg-opacity-10 rounded">
-    <h3 class="text-red-500 mb-4">❌ Bad Fit for Agents</h3>
-
-    - Known steps, deterministic process
-    - Simple Q&A from documentation
-    - Mathematical calculations
-    - Data transformations with fixed rules
-    - Real-time/low-latency requirements
-
-    <div class="mt-4 text-sm text-gray-400">
-      Use regular code or simple LLM calls
-    </div>
-  </div>
-
-  <div class="p-6 bg-green-500 bg-opacity-10 rounded">
-    <h3 class="text-green-500 mb-4">✅ Good Fit for Agents</h3>
-
-    - Complex reasoning required
-    - Multiple tools needed dynamically
-    - Iterative refinement beneficial
-    - Planning required for unknown steps
-    - Human-like judgment needed
-
-    <div class="mt-4 text-sm text-gray-400">
-      Agents add value here
-    </div>
-  </div>
-</div>
-
-<div class="mt-8 text-center text-xl">
-  <span class="text-purple-500">Agents trade latency + cost for capability</span>
-</div>
-
-<!--
-Not everything needs an agent. They're expensive and slow. Use them when the complexity justifies the cost, not for simple deterministic tasks.
--->
-
----
-layout: center
----
-
-# Start Simple, Iterate Deliberately
-
-<div class="text-6xl mt-8">
-  1️⃣ → 🔧 → ♾️
-</div>
-
-<div class="grid grid-cols-3 gap-4 mt-8 text-lg">
-  <div class="text-center">
-    <div class="text-blue-500 font-bold">Single LLM call</div>
-    <div class="text-sm text-gray-400">Start here always</div>
-  </div>
-
-  <div class="text-center">
-    <div class="text-green-500 font-bold">Add tools gradually</div>
-    <div class="text-sm text-gray-400">When needed</div>
-  </div>
-
-  <div class="text-center">
-    <div class="text-purple-500 font-bold">Multi-agent last</div>
-    <div class="text-sm text-gray-400">When proven necessary</div>
-  </div>
-</div>
-
-<div class="mt-12 text-xl text-gray-400 text-center">
-  Complexity should be earned, not assumed
-</div>
-
-<!--
-This is the most important principle. Start with the simplest solution. Add complexity only when you've proven simpler approaches don't work.
+The secret to Claude Code's success? Radical simplicity. Instead of complex multi-agent orchestration, it uses a single thread with smart tool design. This is a masterclass in "less is more" engineering.
 -->
 
 ---
 layout: section
+color: blue-light
 ---
 
-# Lab Exercises
+# Practice
 
-<div class="text-2xl text-gray-400 mt-8">
-  Let's build some agents!
-</div>
+Let's build some agents!
 
 <!--
 Now we'll put these concepts into practice with hands-on exercises building real agents using the patterns we've discussed.
 -->
 
 ---
+layout: top-title-two-cols
+color: blue-light
+---
 
-# Lab 1: Start with Workflows (Not Agents!)
+:: title ::
 
-```python
-# No agent loop - just sequential LLM calls
-import openai
+# Lab Exercise: Build a Code Review Assistant
 
-def workflow_story_generator(topic: str) -> dict:
-    """Workflow: Predefined sequence of LLM calls"""
-    client = openai.OpenAI()
-    results = {}
+:: content ::
 
-    # Step 1: Generate outline (single LLM call)
-    outline_response = client.chat.completions.create(
-        model="gpt-3.5-turbo",  # Cheaper model for simple task
-        messages=[{"role": "user", "content": f"Create outline for story about {topic}"}]
-    )
-    results['outline'] = outline_response.choices[0].message.content
+:: left ::
 
-    # Step 2: Expand to full story (another LLM call)
-    story_response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": f"Write story from outline: {results['outline']}"}]
-    )
-    results['story'] = story_response.choices[0].message.content
+<v-click>
 
-    return results  # Total cost: ~$0.002
+## What You'll Build
 
-# Usage - NO AGENT, just workflow
-story = workflow_story_generator("robot learning to paint")
-print(f"Cost: ~$0.002, Time: ~4s")
-```
+- **Exercise 1**: Deterministic checks + strategic LLM
+- **Exercise 2**: Parallel analysis pattern
+- **Exercise 3**: Reflection for quality improvement
+- **Exercise 4**: Tool integration
+- **Exercise 5**: Production readiness
 
-<div class="mt-4 p-3 bg-blue-500 bg-opacity-10 rounded">
-💡 **Key Point**: This is a workflow, not an agent. No loop, no autonomy, just predefined steps.
-</div>
+</v-click>
+
+:: right ::
+
+<v-click>
+
+## Key Learning Goals
+
+- Start with workflows, not agents
+- Use LLMs only where necessary
+- Apply patterns from lecture
+- Add production safeguards
+- Measure real improvements
+
+</v-click>
+
+:: default ::
+
+<Admonition v-click title="📓 Open the Notebook" color="yellow-light" width="100%">
+
+**Get started**: Open `agentic-practice.ipynb` for hands-on exercises with starter code and test cases
+
+</Admonition>
 
 <!--
-Start with workflows! Most "AI" applications are just workflows - predefined sequences of LLM calls. No agent needed.
+This lab exercise progressively builds a code review assistant, starting from mostly deterministic code and gradually adding AI capabilities only where they add value. Each exercise builds on the previous one, demonstrating the patterns we've discussed.
 -->
 
 ---
-
-# Lab 1: Parallel Workflows for Speed
-
-```python
-import asyncio
-from concurrent.futures import ThreadPoolExecutor
-
-async def parallel_workflow(topic: str):
-    """Run multiple LLM calls in parallel for speed"""
-    client = openai.OpenAI()
-
-    # Define parallel tasks
-    async def get_characters():
-        return client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": f"List 3 characters for story about {topic}"}]
-        )
-
-    async def get_setting():
-        return client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": f"Describe setting for story about {topic}"}]
-        )
-
-    async def get_plot():
-        return client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": f"Create plot for story about {topic}"}]
-        )
-
-    # Run in parallel - 3x faster!
-    characters, setting, plot = await asyncio.gather(
-        get_characters(), get_setting(), get_plot()
-    )
-
-    return {
-        "characters": characters.choices[0].message.content,
-        "setting": setting.choices[0].message.content,
-        "plot": plot.choices[0].message.content
-    }
-
-# Time: ~2s instead of 6s sequential
-```
-
-<!--
-Parallel workflows dramatically reduce latency. If tasks are independent, run them simultaneously. Still not an agent - just optimized workflow.
--->
-
+layout: top-title
+color: blue-light
+align: c
 ---
 
-# Lab 2: Now Build an Agent (With Loop!)
-
-```python
-class SimpleAgent:
-    """NOW we have an agent - it has a loop and makes decisions"""
-
-    def __init__(self):
-        self.client = openai.OpenAI()
-        self.max_iterations = 5
-
-    def run(self, goal: str) -> str:
-        """Agent loop - the LLM controls the process"""
-        context = {"goal": goal, "progress": []}
-
-        for i in range(self.max_iterations):
-            # LLM decides what to do next
-            decision = self.client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[{
-                    "role": "system",
-                    "content": "You are solving a task step by step."
-                }, {
-                    "role": "user",
-                    "content": f"Goal: {goal}\nProgress: {context['progress']}\nWhat's next?"
-                }]
-            )
-
-            next_action = decision.choices[0].message.content
-
-            # Check if done
-            if "COMPLETE" in next_action:
-                return f"Completed: {context['progress']}"
-
-            # Execute action and continue loop
-            context['progress'].append(next_action)
-
-        return f"Max iterations reached: {context['progress']}"
-
-# NOW it's an agent - it has autonomy!
-agent = SimpleAgent()
-result = agent.run("Plan a birthday party")
-```
-
-<!--
-THIS is an agent. It has a loop, makes its own decisions, and controls the process. The difference from a workflow is autonomy.
--->
-
----
-
-# Lab 2: Add Reflection Pattern
-
-```python
-class ReflectiveAgent(ConversationAgent):
-    """Agent that can evaluate and improve its outputs"""
-
-    def generate_with_reflection(self, task: str, max_iterations: int = 3):
-        current_output = None
-
-        for i in range(max_iterations):
-            if current_output is None:
-                # First attempt
-                current_output = self.chat(f"Task: {task}")
-            else:
-                # Improve based on self-evaluation
-                improve_prompt = f"""
-                Previous output: {current_output}
-                Evaluation: {evaluation}
-
-                Please improve your response based on the evaluation.
-                """
-                current_output = self.chat(improve_prompt)
-
-            # Self-evaluate
-            eval_prompt = f"""
-            Evaluate this output for the task '{task}':
-            {current_output}
-
-            Rate 1-10 and explain what could be better.
-            Format: {{"score": N, "feedback": "..."}}
-            """
-
-            evaluation = self.chat(eval_prompt)
-
-            try:
-                eval_data = json.loads(evaluation)
-                if eval_data.get('score', 0) >= 8:
-                    print(f"✅ Accepted after {i+1} iterations")
-                    break
-            except:
-                pass
-
-        return current_output
-
-# Test reflection
-reflective = ReflectiveAgent("You are a code reviewer")
-code = reflective.generate_with_reflection(
-    "Write a Python function to check if a string is a palindrome"
-)
-print(code)
-```
-
-<!--
-Reflection dramatically improves quality. The agent evaluates its own work and iterates until it meets quality standards.
--->
-
----
-
-# Lab 3: Implement Error Recovery
-
-```python
-import time
-from typing import Optional
-
-class ResilientAgent(ConversationAgent):
-    """Agent with comprehensive error handling"""
-
-    def __init__(self, system_prompt: str):
-        super().__init__(system_prompt)
-        self.fallback_responses = {
-            'general': "I'm having trouble processing that request.",
-            'rate_limit': "I'm getting too many requests. Please wait a moment.",
-            'timeout': "This is taking longer than expected.",
-        }
-
-    def chat_with_retry(
-        self,
-        user_input: str,
-        max_retries: int = 3,
-        timeout: float = 30.0
-    ) -> str:
-
-        last_error = None
-
-        for attempt in range(max_retries):
-            try:
-                # Simulate timeout handling
-                start_time = time.time()
-
-                # Try primary model
-                response = self._try_model(user_input, "gpt-4o", timeout)
-                if response:
-                    return response
-
-            except Exception as e:
-                last_error = e
-                print(f"Attempt {attempt + 1} failed: {e}")
-
-                # Exponential backoff
-                if attempt < max_retries - 1:
-                    wait_time = 2 ** attempt
-                    print(f"Waiting {wait_time}s before retry...")
-                    time.sleep(wait_time)
-
-        # All retries failed - use fallback
-        return self._get_fallback(last_error)
-
-    def _try_model(self, input: str, model: str, timeout: float) -> Optional[str]:
-        """Try a specific model with timeout"""
-        # In production, use asyncio with actual timeout
-        try:
-            response = self.client.chat.completions.create(
-                model=model,
-                messages=[
-                    {"role": "system", "content": self.system_prompt},
-                    {"role": "user", "content": input}
-                ],
-                timeout=timeout
-            )
-            return response.choices[0].message.content
-        except Exception as e:
-            if "rate_limit" in str(e).lower():
-                raise Exception("rate_limit")
-            raise
-
-    def _get_fallback(self, error: Exception) -> str:
-        """Return appropriate fallback response"""
-        error_str = str(error).lower()
-
-        if "rate_limit" in error_str:
-            return self.fallback_responses['rate_limit']
-        elif "timeout" in error_str:
-            return self.fallback_responses['timeout']
-        else:
-            return self.fallback_responses['general']
-
-# Test resilience
-resilient = ResilientAgent("You are a helpful assistant")
-response = resilient.chat_with_retry("Tell me about machine learning")
-print(response)
-```
-
-<!--
-Production agents must handle failures gracefully. This implementation shows retry logic, exponential backoff, and fallback responses.
--->
-
----
-
-# Lab 3: Add Human Feedback
-
-```python
-class SupervisedAgent(ConversationAgent):
-    """Agent with human-in-the-loop feedback"""
-
-    def __init__(self, system_prompt: str, require_approval: bool = False):
-        super().__init__(system_prompt)
-        self.require_approval = require_approval
-        self.feedback_history = []
-
-    def chat_with_feedback(self, user_input: str) -> str:
-        # Generate initial response
-        response = self.chat(user_input)
-
-        # Check if approval required
-        if self.require_approval:
-            response = self._get_approval(response, user_input)
-
-        return response
-
-    def _get_approval(self, response: str, original_input: str) -> str:
-        """Get human approval before finalizing"""
-        print("\n" + "="*50)
-        print("DRAFT RESPONSE:")
-        print(response)
-        print("="*50)
-
-        while True:
-            feedback = input("\n[A]pprove, [R]evise, or [C]ancel? ").lower()
-
-            if feedback == 'a':
-                print("✅ Response approved")
-                return response
-
-            elif feedback == 'r':
-                revision_request = input("What should be changed? ")
-                self.feedback_history.append({
-                    'original': response,
-                    'feedback': revision_request
-                })
-
-                # Generate revised response
-                revision_prompt = f"""
-                Original request: {original_input}
-                Draft response: {response}
-                Feedback: {revision_request}
-
-                Please revise the response based on the feedback.
-                """
-                response = self.chat(revision_prompt)
-                print("\n🔄 Revised response generated")
-
-            elif feedback == 'c':
-                return "Request cancelled by user."
-
-    def show_feedback_stats(self):
-        """Display feedback statistics"""
-        if not self.feedback_history:
-            print("No feedback collected yet")
-            return
-
-        print(f"\nFeedback Statistics:")
-        print(f"Total revisions: {len(self.feedback_history)}")
-
-        # Analyze common feedback themes
-        common_feedback = {}
-        for item in self.feedback_history:
-            words = item['feedback'].lower().split()
-            for word in words:
-                common_feedback[word] = common_feedback.get(word, 0) + 1
-
-        print("Common feedback terms:", dict(sorted(
-            common_feedback.items(),
-            key=lambda x: x[1],
-            reverse=True
-        )[:5]))
-
-# Test supervised agent
-supervised = SupervisedAgent(
-    "You are writing professional emails",
-    require_approval=True
-)
-
-# Simulate email generation
-email = supervised.chat_with_feedback(
-    "Write an email declining a meeting invitation politely"
-)
-print("\nFinal email:", email)
-
-supervised.show_feedback_stats()
-```
-
-<!--
-Human feedback is crucial for high-stakes outputs. This pattern allows review and revision before any action is taken.
--->
-
----
+:: title ::
 
 # Decision Flowchart: Do You Need an Agent?
 
-```mermaid
-graph TD
-    Start[Have a problem to solve] --> Q1{Can you write<br/>deterministic code?}
-    Q1 -->|Yes| Code[Use regular code<br/>Cost: $0]
-    Q1 -->|No| Q2{Is it a single<br/>classification/extraction?}
-    Q2 -->|Yes| Single[Single LLM call<br/>Cost: $0.001]
-    Q2 -->|No| Q3{Are the steps<br/>known in advance?}
-    Q3 -->|Yes| Workflow[Use workflow pattern<br/>Cost: $0.01]
-    Q3 -->|No| Q4{Does it need<br/>dynamic planning?}
-    Q4 -->|No| Enhanced[Workflow + tools<br/>Cost: $0.05]
-    Q4 -->|Yes| Q5{Can one agent<br/>handle it?}
-    Q5 -->|Yes| Agent[Single agent<br/>Cost: $0.10+]
-    Q5 -->|No| Multi[Multi-agent<br/>Cost: $1.00+]
+:: content ::
+
+```mermaid {scale: 0.5}
+graph LR
+    Start[Problem<br/>to solve] --> Q1{Deterministic<br/>code?}
+    Q1 -->|Yes| Code[Regular code<br/>💰 $0]
+    Q1 -->|No| Q2{Single<br/>LLM call?}
+
+    Q2 -->|Yes| Single[Single LLM<br/>💰 $0.001]
+    Q2 -->|No| Q3{Fixed<br/>steps?}
+
+    Q3 -->|Yes| Workflow[Workflow<br/>💰 $0.01]
+    Q3 -->|No| Q4{Dynamic<br/>planning?}
+
+    Q4 -->|No| Enhanced[Workflow<br/>+ tools<br/>💰 $0.05]
+    Q4 -->|Yes| Q5{Single<br/>agent OK?}
+
+    Q5 -->|Yes| Agent[Agent<br/>💰 $0.10+]
+    Q5 -->|No| Multi[Multi-agent<br/>💰 $1.00+]
 
     style Code fill:#90EE90
     style Single fill:#98FB98
@@ -1805,8 +1582,8 @@ graph TD
     style Multi fill:#FFA07A
 ```
 
-<div class="mt-6 text-center text-lg text-gray-400">
-  Start at the top, only move down when necessary
+<div class="text-center text-lg text-gray-400 mt-4">
+  Complexity increases left to right → Start simple, add only as needed
 </div>
 
 <!--
@@ -1814,117 +1591,58 @@ This flowchart is your decision guide. Always start with the simplest solution. 
 -->
 
 ---
-layout: center
+layout: credits
+color: dark
+speed: 1.5
+loop: false
 ---
 
-# Key Takeaways
+<div class="grid text-size-4 grid-cols-3 w-3/4 gap-y-10 auto-rows-min ml-auto mr-auto">
+<div class="grid-item text-center mr-0- col-span-3">
 
-<div class="grid grid-cols-2 gap-8 mt-8">
-  <div class="space-y-4">
-    <div class="flex items-start gap-3">
-      <span class="text-2xl">1️⃣</span>
-      <div>
-        <div class="font-bold">Start simple</div>
-        <div class="text-sm text-gray-400">Single LLM call → Add complexity only when proven necessary</div>
-      </div>
-    </div>
+# Resources & References
 
-    <div class="flex items-start gap-3">
-      <span class="text-2xl">2️⃣</span>
-      <div>
-        <div class="font-bold">Context > Prompts</div>
-        <div class="text-sm text-gray-400">Quality of context determines success</div>
-      </div>
-    </div>
-
-    <div class="flex items-start gap-3">
-      <span class="text-2xl">3️⃣</span>
-      <div>
-        <div class="font-bold">Build blocks, not monoliths</div>
-        <div class="text-sm text-gray-400">7 primitives combine into any pattern</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="space-y-4">
-    <div class="flex items-start gap-3">
-      <span class="text-2xl">4️⃣</span>
-      <div>
-        <div class="font-bold">Expect failure</div>
-        <div class="text-sm text-gray-400">Robust error handling is not optional</div>
-      </div>
-    </div>
-
-    <div class="flex items-start gap-3">
-      <span class="text-2xl">5️⃣</span>
-      <div>
-        <div class="font-bold">Use frameworks wisely</div>
-        <div class="text-sm text-gray-400">For observability, not agent logic</div>
-      </div>
-    </div>
-
-    <div class="flex items-start gap-3">
-      <span class="text-2xl">6️⃣</span>
-      <div>
-        <div class="font-bold">Simplicity wins</div>
-        <div class="text-sm text-gray-400">Claude Code proves this daily</div>
-      </div>
-    </div>
-  </div>
+</div>
+<div class="grid-item text-center mr-0- col-span-3">
+  <strong>Essential Reading</strong><br>
+  <span class="font-size-3 mt-0">Key papers and articles</span>
 </div>
 
-<!--
-These are the key principles to remember. Start simple, focus on context, build with composable blocks, handle failures, and resist unnecessary complexity.
--->
+<div class="grid-item text-right mr-4 col-span-1"><strong>Anthropic</strong></div>
+<div class="grid-item col-span-2">
+<a href="https://anthropic.com/engineering/building-effective-agents">Building Effective Agents</a><br/>
+<a href="https://anthropic.com/engineering/multi-agent-research-system">Multi-Agent Research System</a>
+</div>
+<div class="grid-item text-right mr-4 col-span-1"><strong>Community</strong></div>
+<div class="grid-item col-span-2">
+<a href="https://minusx.ai/blog/decoding-claude-code/">Claude Code Analysis - MinusX</a><br/>
+<a href="https://www.philschmid.de/agentic-pattern">Agentic Patterns - Phil Schmid</a>
+</div>
+<div class="grid-item text-center mr-0- col-span-3">
+  <strong>Code Examples</strong><br>
+  <span class="font-size-3 mt-0">Repositories and implementations</span>
+</div>
+<div class="grid-item text-right mr-4 col-span-1"><strong>GitHub</strong></div>
+<div class="grid-item col-span-2">
+<a href="https://github.com/daveebbelaar/ai-cookbook/tree/main/agents/building-blocks">Building Blocks Repository</a><br/>
+<a href="https://github.com/openai/openai-agents-python">OpenAI Agent Patterns</a><br/>
+<a href="https://www.agentrecipes.com/">Agent Recipes</a>
+</div>
+<div class="grid-item text-center mr-0- col-span-3">
+  <strong>Community</strong><br>
+  <span class="font-size-3 mt-0">Join the discussion</span>
+</div>
+<div class="grid-item text-right mr-4 col-span-1"><strong>Discord</strong></div>
+<div class="grid-item col-span-2"><a href="https://discord.gg/claude">Claude Developers Discord</a></div>
+<div class="grid-item text-right mr-4 col-span-1"><strong>Reddit</strong></div>
+<div class="grid-item col-span-3 text-center mt-60px mb-auto font-size-1.5rem"><strong>Thank You!</strong></div>
 
----
-layout: section
----
-
-# Resources
-
-<div class="mt-8 space-y-3 text-lg">
-
-📚 **Essential Reading**
-
-- [Building Effective Agents](https://anthropic.com/engineering/building-effective-agents) - Anthropic
-- [Multi-Agent Research System](https://anthropic.com/engineering/multi-agent-research-system) - Anthropic
-- [Claude Code Analysis](https://minusx.ai/blog/decoding-claude-code/) - MinusX
-- [Agentic Patterns](https://www.philschmid.de/agentic-pattern) - Phil Schmid
-
-🔧 **Code Examples**
-
-- [Building Blocks Repository](https://github.com/daveebbelaar/ai-cookbook/tree/main/agents/building-blocks)
-- [OpenAI Agent Patterns](https://github.com/openai/openai-agents-python)
-- [Agent Recipes](https://www.agentrecipes.com/)
-
-💬 **Community**
-
-- [Claude Developers Discord](https://discord.gg/claude)
-- [r/LocalLLaMA](https://reddit.com/r/LocalLLaMA)
-
+<div class="grid-item text-center mr-0- col-span-3">
+  <strong>Questions?</strong><br>
+  <span class="font-size-3 mt-0">Let's discuss what you are building</span>
+</div>
 </div>
 
 <!--
 Here are the key resources for diving deeper. Start with Anthropic's articles - they're based on real production experience.
--->
-
----
-layout: center
-class: text-center
----
-
-# Questions?
-
-<div class="mt-8 text-xl text-gray-400">
-Let's discuss what you're building
-</div>
-
-<div class="mt-12 text-sm text-gray-500">
-Contact: [your contact info]<br/>
-Slides: [repository link]
-</div>
-
-<!--
-Thank you for your attention. I'm excited to hear about what you're planning to build with these concepts.
 -->
