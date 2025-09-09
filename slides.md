@@ -514,6 +514,52 @@ This is the key insight: there's a progression. Most problems don't need agents.
 -->
 
 ---
+layout: top-title
+color: blue-light
+align: c
+---
+
+:: title ::
+
+# Decision Flowchart: Do You Need an Agent?
+
+:: content ::
+
+```mermaid {scale: 0.5}
+graph LR
+    Start[Problem<br/>to solve] --> Q1{Deterministic<br/>code?}
+    Q1 -->|Yes| Code[Regular code<br/>💰 $0]
+    Q1 -->|No| Q2{Single<br/>LLM call?}
+
+    Q2 -->|Yes| Single[Single LLM<br/>💰 $0.001]
+    Q2 -->|No| Q3{Fixed<br/>steps?}
+
+    Q3 -->|Yes| Workflow[Workflow<br/>💰 $0.01]
+    Q3 -->|No| Q4{Dynamic<br/>planning?}
+
+    Q4 -->|No| Enhanced[Workflow<br/>+ tools<br/>💰 $0.05]
+    Q4 -->|Yes| Q5{Single<br/>agent OK?}
+
+    Q5 -->|Yes| Agent[Agent<br/>💰 $0.10+]
+    Q5 -->|No| Multi[Multi-agent<br/>💰 $1.00+]
+
+    style Code fill:#90EE90
+    style Single fill:#98FB98
+    style Workflow fill:#FFFFE0
+    style Enhanced fill:#FFE4B5
+    style Agent fill:#FFB6C1
+    style Multi fill:#FFA07A
+```
+
+<div class="text-center text-lg text-gray-400 mt-4">
+  Complexity increases left to right → Start simple, add only as needed
+</div>
+
+<!--
+This flowchart is your decision guide. Always start with the simplest solution. Each step down adds cost and complexity.
+-->
+
+---
 layout: top-title-two-cols
 color: blue-light
 ---
@@ -1563,52 +1609,6 @@ color: blue-light
 
 <!--
 This lab exercise progressively builds a code review assistant, starting from mostly deterministic code and gradually adding AI capabilities only where they add value. Each exercise builds on the previous one, demonstrating the patterns we've discussed.
--->
-
----
-layout: top-title
-color: blue-light
-align: c
----
-
-:: title ::
-
-# Decision Flowchart: Do You Need an Agent?
-
-:: content ::
-
-```mermaid {scale: 0.5}
-graph LR
-    Start[Problem<br/>to solve] --> Q1{Deterministic<br/>code?}
-    Q1 -->|Yes| Code[Regular code<br/>💰 $0]
-    Q1 -->|No| Q2{Single<br/>LLM call?}
-
-    Q2 -->|Yes| Single[Single LLM<br/>💰 $0.001]
-    Q2 -->|No| Q3{Fixed<br/>steps?}
-
-    Q3 -->|Yes| Workflow[Workflow<br/>💰 $0.01]
-    Q3 -->|No| Q4{Dynamic<br/>planning?}
-
-    Q4 -->|No| Enhanced[Workflow<br/>+ tools<br/>💰 $0.05]
-    Q4 -->|Yes| Q5{Single<br/>agent OK?}
-
-    Q5 -->|Yes| Agent[Agent<br/>💰 $0.10+]
-    Q5 -->|No| Multi[Multi-agent<br/>💰 $1.00+]
-
-    style Code fill:#90EE90
-    style Single fill:#98FB98
-    style Workflow fill:#FFFFE0
-    style Enhanced fill:#FFE4B5
-    style Agent fill:#FFB6C1
-    style Multi fill:#FFA07A
-```
-
-<div class="text-center text-lg text-gray-400 mt-4">
-  Complexity increases left to right → Start simple, add only as needed
-</div>
-
-<!--
-This flowchart is your decision guide. Always start with the simplest solution. Each step down adds cost and complexity.
 -->
 
 ---
