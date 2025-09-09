@@ -55,6 +55,159 @@ An agent is fundamentally just three things combined: an LLM for reasoning, tool
 
 ---
 
+# The Cost of Intelligence
+
+<div class="grid grid-cols-3 gap-6 mt-8">
+  <div class="p-4 bg-red-500 bg-opacity-10 rounded">
+    <h3 class="text-red-500 text-2xl mb-2">💸 Cost</h3>
+    <div class="text-lg font-mono">
+      GPT-4o: ~$5/M tokens<br/>
+      1000 calls/day = $150/mo<br/>
+      <span class="text-sm text-gray-400">Adds up fast at scale</span>
+    </div>
+  </div>
+
+  <div class="p-4 bg-orange-500 bg-opacity-10 rounded">
+    <h3 class="text-orange-500 text-2xl mb-2">⏱️ Latency</h3>
+    <div class="text-lg font-mono">
+      First token: 200-500ms<br/>
+      Full response: 2-10s<br/>
+      <span class="text-sm text-gray-400">100x slower than DB query</span>
+    </div>
+  </div>
+
+  <div class="p-4 bg-yellow-500 bg-opacity-10 rounded">
+    <h3 class="text-yellow-500 text-2xl mb-2">🎲 Variance</h3>
+    <div class="text-lg font-mono">
+      Same input → Different output<br/>
+      Format changes randomly<br/>
+      <span class="text-sm text-gray-400">Even at temperature=0</span>
+    </div>
+  </div>
+</div>
+
+<div class="mt-8 p-4 bg-purple-500 bg-opacity-10 rounded text-center">
+  <div class="text-xl font-bold">"Making an LLM API call is the most expensive and dangerous operation in modern software"</div>
+  <div class="text-sm text-gray-400 mt-2">- Dave Ebbelaar, AI Cookbook</div>
+</div>
+
+<!--
+This is critical context. Every LLM call costs real money, takes significant time, and produces unpredictable results. This shapes everything about how we build agents.
+-->
+
+---
+
+# The Evolution Path
+
+<div class="mt-8">
+  <div class="flex items-center justify-between mb-8">
+    <div class="text-center flex-1">
+      <div class="text-3xl mb-2">📝</div>
+      <div class="text-xl font-bold text-blue-500">Deterministic Code</div>
+      <div class="text-sm text-gray-400">If/else, rules, algorithms</div>
+    </div>
+    <div class="text-2xl">→</div>
+    <div class="text-center flex-1">
+      <div class="text-3xl mb-2">🧠</div>
+      <div class="text-xl font-bold text-green-500">Single LLM Call</div>
+      <div class="text-sm text-gray-400">Classification, extraction</div>
+    </div>
+    <div class="text-2xl">→</div>
+    <div class="text-center flex-1">
+      <div class="text-3xl mb-2">🔄</div>
+      <div class="text-xl font-bold text-purple-500">Workflow</div>
+      <div class="text-sm text-gray-400">Predefined paths</div>
+    </div>
+    <div class="text-2xl">→</div>
+    <div class="text-center flex-1">
+      <div class="text-3xl mb-2">🤖</div>
+      <div class="text-xl font-bold text-red-500">Agent</div>
+      <div class="text-sm text-gray-400">Autonomous decisions</div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-4 gap-4 mt-8">
+    <div class="text-center">
+      <div class="text-green-500">✅ Fast</div>
+      <div class="text-green-500">✅ Cheap</div>
+      <div class="text-green-500">✅ Predictable</div>
+      <div class="text-red-500">❌ Limited</div>
+    </div>
+    <div class="text-center">
+      <div class="text-green-500">✅ Flexible</div>
+      <div class="text-yellow-500">⚠️ Slower</div>
+      <div class="text-yellow-500">⚠️ Costs $</div>
+      <div class="text-green-500">✅ Handles variety</div>
+    </div>
+    <div class="text-center">
+      <div class="text-green-500">✅ Structured</div>
+      <div class="text-green-500">✅ Debuggable</div>
+      <div class="text-yellow-500">⚠️ More complex</div>
+      <div class="text-green-500">✅ Reliable</div>
+    </div>
+    <div class="text-center">
+      <div class="text-green-500">✅ Autonomous</div>
+      <div class="text-red-500">❌ Expensive</div>
+      <div class="text-red-500">❌ Slow</div>
+      <div class="text-red-500">❌ Unpredictable</div>
+    </div>
+  </div>
+</div>
+
+<div class="mt-8 text-center text-xl text-gray-400">
+  Only move right when you've proven the left doesn't work
+</div>
+
+<!--
+This is the key insight: there's a progression. Most problems don't need agents. Start simple, add complexity only when necessary.
+-->
+
+---
+
+# When NOT to Use Agents
+
+<div class="grid grid-cols-2 gap-8 mt-8">
+  <div class="p-6 bg-green-500 bg-opacity-10 rounded">
+    <h3 class="text-green-500 mb-4">✅ Use Deterministic Code For:</h3>
+
+    - **Known business rules** (if age > 18...)
+    - **Mathematical calculations**
+    - **Data transformations** (JSON → CSV)
+    - **State machines** (order workflows)
+    - **Validation logic** (email format)
+    - **CRUD operations**
+
+    <div class="mt-4 p-3 bg-gray-800 rounded text-sm">
+      <span class="text-gray-400">Example:</span> Payment processing, user authentication, data pipelines
+    </div>
+  </div>
+
+  <div class="p-6 bg-purple-500 bg-opacity-10 rounded">
+    <h3 class="text-purple-500 mb-4">🤖 Use Agents Only For:</h3>
+
+    - **Open-ended problems** (research, analysis)
+    - **Creative tasks** (content generation)
+    - **Complex reasoning** (multi-step planning)
+    - **Natural language understanding**
+    - **Dynamic tool selection**
+    - **Iterative refinement needed**
+
+    <div class="mt-4 p-3 bg-gray-800 rounded text-sm">
+      <span class="text-gray-400">Example:</span> Customer support, code generation, research assistants
+    </div>
+  </div>
+</div>
+
+<div class="mt-8 text-center p-4 bg-yellow-500 bg-opacity-10 rounded">
+  💡 **Rule of Thumb**: If you can write it in 100 lines of Python, don't use an agent
+</div>
+
+<!--
+Most developers jump to agents too quickly. If you can solve it deterministically, you should. Agents are for problems you CAN'T solve with regular code.
+-->
+
+---
+
 # The Uncomfortable Truth About Production
 
 <div class="grid grid-cols-2 gap-8 mt-8">
@@ -226,81 +379,198 @@ The shift from prompt engineering to context engineering is fundamental. It's no
 
 ---
 
-# The 7 Fundamental Building Blocks
+# Context Engineering: The Right Information
 
-<div class="grid grid-cols-2 gap-4 mt-6">
-  <div class="p-4 bg-blue-500 bg-opacity-10 rounded">
-    <h3 class="text-blue-500">1. Intelligence 🧠</h3>
-    <p class="text-sm">LLM processing and reasoning</p>
-  </div>
+```python
+def build_context(user_query: str, session_id: str) -> dict:
+    """Gather ALL relevant information for the LLM"""
 
-  <div class="p-4 bg-green-500 bg-opacity-10 rounded">
-    <h3 class="text-green-500">2. Memory 💾</h3>
-    <p class="text-sm">Conversation state persistence</p>
-  </div>
+    return {
+        # User context
+        "user_profile": load_user_profile(session_id),
+        "conversation_history": get_recent_messages(session_id, limit=10),
+        "user_preferences": get_preferences(session_id),
 
-  <div class="p-4 bg-purple-500 bg-opacity-10 rounded">
-    <h3 class="text-purple-500">3. Tools 🔧</h3>
-    <p class="text-sm">External system integrations</p>
-  </div>
+        # Domain context
+        "relevant_documents": vector_search(user_query, top_k=5),
+        "business_rules": load_business_rules(),
+        "current_state": get_system_state(),
 
-  <div class="p-4 bg-yellow-500 bg-opacity-10 rounded">
-    <h3 class="text-yellow-500">4. Validation ✓</h3>
-    <p class="text-sm">Structured output enforcement</p>
-  </div>
+        # Temporal context
+        "timestamp": datetime.now().isoformat(),
+        "timezone": get_user_timezone(session_id),
+        "business_hours": is_business_hours(),
 
-  <div class="p-4 bg-red-500 bg-opacity-10 rounded">
-    <h3 class="text-red-500">5. Control 🚦</h3>
-    <p class="text-sm">Deterministic routing logic</p>
-  </div>
+        # Constraints
+        "max_response_length": 500,
+        "allowed_actions": get_user_permissions(session_id),
+        "compliance_rules": load_compliance_requirements()
+    }
+```
 
-  <div class="p-4 bg-orange-500 bg-opacity-10 rounded">
-    <h3 class="text-orange-500">6. Recovery 🔄</h3>
-    <p class="text-sm">Error handling and retries</p>
-  </div>
-
-  <div class="p-4 bg-indigo-500 bg-opacity-10 rounded">
-    <h3 class="text-indigo-500">7. Feedback 👤</h3>
-    <p class="text-sm">Human oversight workflows</p>
-  </div>
-</div>
-
-<div class="mt-6 text-center text-gray-400">
-  Every agent is built from these primitives
+<div class="mt-6 text-center text-lg text-gray-400">
+  More context = Better decisions = Fewer hallucinations
 </div>
 
 <!--
-These seven building blocks are all you need. Everything else is just combinations and variations of these fundamental components.
+Context engineering is about gathering ALL relevant information. The more context you provide, the better the LLM can reason about the problem and provide accurate responses.
 -->
 
 ---
 
-# Building Block 1: Intelligence
+# Context Engineering: Tool Documentation
+
+<div class="grid grid-cols-2 gap-8 mt-8">
+  <div>
+    <h3 class="text-red-500 mb-4">❌ Poor Tool Documentation</h3>
 
 ```python
-from openai import OpenAI
-
-def basic_intelligence(prompt: str) -> str:
-    """The only truly 'AI' component"""
-    client = OpenAI()
-    response = client.chat.completions.create(
-        model="gpt-4o",
-        messages=[{"role": "user", "content": prompt}]
-    )
-    return response.choices[0].message.content
+tools = [{
+    "name": "search",
+    "description": "Search for stuff",
+    "parameters": {
+        "q": {"type": "string"}
+    }
+}]
 ```
 
-<div class="mt-8">
-  <h3 class="text-blue-500 mb-4">Key Points</h3>
+LLM doesn't know:
+- What to search for
+- What format to expect
+- When to use this tool
+- What 'q' means
 
-- Text in → Think → Text out
-- Without this, you just have regular software
-- Everything else is scaffolding around this core
+  </div>
 
+  <div>
+    <h3 class="text-green-500 mb-4">✅ Rich Tool Documentation</h3>
+
+```python
+tools = [{
+    "name": "search_knowledge_base",
+    "description": """Search internal docs.
+    Use for: technical questions, policies
+    Returns: Top 5 relevant documents
+    Example: 'error handling python'""",
+    "parameters": {
+        "query": {
+            "type": "string",
+            "description": "Search terms",
+            "examples": ["API error", "login"]
+        },
+        "doc_type": {
+            "type": "string",
+            "enum": ["policy", "technical", "faq"],
+            "description": "Filter by type"
+        }
+    }
+}]
+```
+
+  </div>
+</div>
+
+<div class="mt-8 p-4 bg-blue-500 bg-opacity-10 rounded text-center">
+  💡 **Key Insight**: LLMs perform better with detailed tool documentation - treat them like new developers
 </div>
 
 <!--
-Intelligence is the core - it's what makes your system "AI". But notice how simple it is. The complexity comes from everything we build around it.
+Tool documentation is critical. The LLM needs to understand not just what a tool does, but when to use it, what to expect, and how to format inputs. Think of it as onboarding a new developer.
+-->
+
+---
+
+# The 7 Fundamental Building Blocks
+
+<div class="grid grid-cols-2 gap-4 mt-6">
+  <div class="p-4 bg-red-500 bg-opacity-10 rounded">
+    <h3 class="text-red-500">1. Control 🚦</h3>
+    <p class="text-sm">Deterministic routing (use first!)</p>
+    <p class="text-xs text-green-400 mt-1">💰 Free | ⚡ Instant</p>
+  </div>
+
+  <div class="p-4 bg-yellow-500 bg-opacity-10 rounded">
+    <h3 class="text-yellow-500">2. Validation ✓</h3>
+    <p class="text-sm">Structured output enforcement</p>
+    <p class="text-xs text-green-400 mt-1">💰 Cheap | ⚡ Fast</p>
+  </div>
+
+  <div class="p-4 bg-orange-500 bg-opacity-10 rounded">
+    <h3 class="text-orange-500">3. Recovery 🔄</h3>
+    <p class="text-sm">Error handling and retries</p>
+    <p class="text-xs text-green-400 mt-1">💰 Free | ⚡ Instant</p>
+  </div>
+
+  <div class="p-4 bg-green-500 bg-opacity-10 rounded">
+    <h3 class="text-green-500">4. Memory 💾</h3>
+    <p class="text-sm">Conversation state persistence</p>
+    <p class="text-xs text-yellow-400 mt-1">💰 Storage cost | ⚡ Fast</p>
+  </div>
+
+  <div class="p-4 bg-indigo-500 bg-opacity-10 rounded">
+    <h3 class="text-indigo-500">5. Feedback 👤</h3>
+    <p class="text-sm">Human oversight workflows</p>
+    <p class="text-xs text-yellow-400 mt-1">💰 Human time | ⚡ Variable</p>
+  </div>
+
+  <div class="p-4 bg-purple-500 bg-opacity-10 rounded">
+    <h3 class="text-purple-500">6. Tools 🔧</h3>
+    <p class="text-sm">External system integrations</p>
+    <p class="text-xs text-orange-400 mt-1">💰 API costs | ⚡ Network latency</p>
+  </div>
+
+  <div class="p-4 bg-blue-500 bg-opacity-10 rounded">
+    <h3 class="text-blue-500">7. Intelligence 🧠</h3>
+    <p class="text-sm">LLM processing (use last!)</p>
+    <p class="text-xs text-red-400 mt-1">💰 Expensive | ⚡ Slow (2-10s)</p>
+  </div>
+</div>
+
+<div class="mt-6 text-center text-gray-400">
+  Start with cheap/fast blocks → Add expensive blocks only when needed
+</div>
+
+<!--
+Notice the reordering: Control comes first (it's free!), Intelligence comes last (it's expensive!). This reflects the reality of building production systems - exhaust deterministic options before using LLMs.
+-->
+
+---
+
+# Building Block 1: Control (Start Here!)
+
+```python
+def route_request(user_input: str):
+    """Deterministic routing - don't let LLM decide everything"""
+
+    # Use LLM ONLY for classification
+    intent = classify_intent(user_input)
+
+    # Regular code handles ALL routing logic
+    if intent == "complaint":
+        return handle_complaint(user_input)
+    elif intent == "technical":
+        return technical_support(user_input)
+    elif intent == "billing":
+        return billing_system(user_input)
+    else:
+        return general_response(user_input)
+```
+
+<div class="grid grid-cols-2 gap-8 mt-8">
+  <div class="text-green-500">
+    ✅ **Use LLMs for**: Classification, understanding intent
+  </div>
+  <div class="text-red-500">
+    ❌ **Use code for**: Routing, business logic, control flow
+  </div>
+</div>
+
+<div class="mt-6 p-3 bg-blue-500 bg-opacity-10 rounded text-center">
+  💡 **90% of "AI" logic should be regular code** - LLMs are just for the 10% you can't code
+</div>
+
+<!--
+Control is your first building block because it's free and deterministic. Use regular code for everything you can. Only use LLMs for what code can't handle - like understanding natural language.
 -->
 
 ---
@@ -504,7 +774,6 @@ Not everything should be fully automated. Some decisions are too important or co
 -->
 
 ---
-
 layout: center
 ---
 
@@ -733,26 +1002,28 @@ Multi-agent patterns coordinate specialists for complex tasks. But beware - they
   <div>
     <h3 class="text-blue-500 mb-4">Architecture Insights</h3>
 
-    - **Single main thread** (not multi-agent chaos)
-    - **Simple tools** over complex abstractions
-    - **50% of calls** use cheaper models
-    - **One main loop** with sub-agents max depth 1
+- Single main thread (not multi-agent chaos)
+- Simple tools over complex abstractions
+- 50% of calls use cheaper models
+- One main loop with sub-agents max depth 1
+
   </div>
 
   <div>
     <h3 class="text-green-500 mb-4">Tool Design</h3>
 
-    ```python
-    # High-frequency → dedicated tool
-    tools = [
-        Edit(),    # Used constantly
-        Read(),    # Used constantly
-        Search(),  # Used often
-    ]
+```python
+# High-frequency → dedicated tool
+tools = [
+    Edit(),    # Used constantly
+    Read(),    # Used constantly
+    Search(),  # Used often
+]
 
-    # Low-frequency → generic bash
-    bash("git commit -m 'message'")
-    ```
+# Low-frequency → generic bash
+bash("git commit -m 'message'")
+```
+
   </div>
 </div>
 
@@ -762,6 +1033,104 @@ Multi-agent patterns coordinate specialists for complex tasks. But beware - they
 
 <!--
 Claude Code is one of the most successful AI coding assistants. Its secret? Radical simplicity. One thread, simple tools, smart use of cheaper models.
+-->
+
+---
+
+# Production Realities: Real Numbers
+
+<div class="grid grid-cols-2 gap-8 mt-6">
+  <div>
+    <h3 class="text-red-500 mb-4">💰 Cost Reality Check</h3>
+
+    ```python
+    # Real production costs (per 1000 requests)
+    costs = {
+        "gpt-4o": 150,        # $0.15 per request
+        "gpt-3.5-turbo": 20,  # $0.02 per request
+        "claude-3.5": 120,    # $0.12 per request
+        "embedding": 0.50,    # $0.0005 per request
+    }
+
+    # 10K users, 10 requests/day each
+    # = 100K requests/day
+    # = $15,000/day with GPT-4o
+    # = $2,000/day with GPT-3.5
+    ```
+  </div>
+
+  <div>
+    <h3 class="text-orange-500 mb-4">⏱️ Latency Breakdown</h3>
+
+    ```python
+    # Typical response times
+    latencies = {
+        "network_roundtrip": 50,    # ms
+        "first_token": 300,         # ms
+        "full_response": 3000,      # ms (3s)
+        "tool_call": 100,           # ms
+        "total_agent_loop": 5000,   # ms (5s)
+    }
+
+    # User tolerance thresholds
+    # < 1s: Feels instant
+    # 1-3s: Noticeable wait
+    # > 5s: Users get frustrated
+    # > 10s: Users leave
+    ```
+  </div>
+</div>
+
+<div class="mt-6 p-4 bg-yellow-500 bg-opacity-10 rounded text-center">
+  🎯 **Strategy**: Use GPT-4 for complex reasoning, GPT-3.5 for simple tasks, cache aggressively
+</div>
+
+<!--
+These are real numbers from production systems. Cost and latency compound quickly. You need strategies to manage both.
+-->
+
+---
+
+# Production Realities: Debugging Agents
+
+```python
+import logging
+from datetime import datetime
+
+class DebugAgent:
+    def __init__(self, name: str):
+        self.name = name
+        self.trace = []
+
+    def log_decision(self, decision_type: str, data: dict):
+        """Log every decision point for debugging"""
+        entry = {
+            "timestamp": datetime.now().isoformat(),
+            "agent": self.name,
+            "decision": decision_type,
+            "data": data,
+            "context_size": len(str(data))
+        }
+        self.trace.append(entry)
+        logging.info(f"[{self.name}] {decision_type}: {data.get('reason', '')}")
+
+    def export_trace(self) -> str:
+        """Export full decision trace for debugging"""
+        return json.dumps(self.trace, indent=2)
+```
+
+<div class="mt-6">
+  <h3 class="text-blue-500 mb-2">Essential Debugging Information:</h3>
+
+  - **Every LLM call** (input, output, tokens used, cost)
+  - **Tool calls** (which tool, parameters, results)
+  - **Decision points** (why agent chose path A vs B)
+  - **Context state** at each step
+  - **Timing information** for performance analysis
+</div>
+
+<!--
+You can't debug what you can't see. Log everything in development, selectively in production. The trace is your lifeline when things go wrong.
 -->
 
 ---
@@ -975,7 +1344,6 @@ Not everything needs an agent. They're expensive and slow. Use them when the com
 -->
 
 ---
-
 layout: center
 ---
 
@@ -1011,7 +1379,6 @@ This is the most important principle. Start with the simplest solution. Add comp
 -->
 
 ---
-
 layout: section
 ---
 
@@ -1027,135 +1394,142 @@ Now we'll put these concepts into practice with hands-on exercises building real
 
 ---
 
-# Lab 1: Build a Simple Agent
+# Lab 1: Start with Workflows (Not Agents!)
 
 ```python
-# No frameworks - just Python and API calls
+# No agent loop - just sequential LLM calls
 import openai
-from typing import List, Dict
 
-class ConversationAgent:
-    """A minimal agent with memory"""
+def workflow_story_generator(topic: str) -> dict:
+    """Workflow: Predefined sequence of LLM calls"""
+    client = openai.OpenAI()
+    results = {}
 
-    def __init__(self, system_prompt: str):
-        self.client = openai.OpenAI()
-        self.system_prompt = system_prompt
-        self.conversation: List[Dict[str, str]] = []
+    # Step 1: Generate outline (single LLM call)
+    outline_response = client.chat.completions.create(
+        model="gpt-3.5-turbo",  # Cheaper model for simple task
+        messages=[{"role": "user", "content": f"Create outline for story about {topic}"}]
+    )
+    results['outline'] = outline_response.choices[0].message.content
 
-    def chat(self, user_input: str) -> str:
-        # Add user message to history
-        self.conversation.append({"role": "user", "content": user_input})
+    # Step 2: Expand to full story (another LLM call)
+    story_response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": f"Write story from outline: {results['outline']}"}]
+    )
+    results['story'] = story_response.choices[0].message.content
 
-        # Call LLM with full context
-        response = self.client.chat.completions.create(
-            model="gpt-4o-mini",  # Start with cheaper model
-            messages=[
-                {"role": "system", "content": self.system_prompt},
-                *self.conversation
-            ]
+    return results  # Total cost: ~$0.002
+
+# Usage - NO AGENT, just workflow
+story = workflow_story_generator("robot learning to paint")
+print(f"Cost: ~$0.002, Time: ~4s")
+```
+
+<div class="mt-4 p-3 bg-blue-500 bg-opacity-10 rounded">
+💡 **Key Point**: This is a workflow, not an agent. No loop, no autonomy, just predefined steps.
+</div>
+
+<!--
+Start with workflows! Most "AI" applications are just workflows - predefined sequences of LLM calls. No agent needed.
+-->
+
+---
+
+# Lab 1: Parallel Workflows for Speed
+
+```python
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
+
+async def parallel_workflow(topic: str):
+    """Run multiple LLM calls in parallel for speed"""
+    client = openai.OpenAI()
+
+    # Define parallel tasks
+    async def get_characters():
+        return client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": f"List 3 characters for story about {topic}"}]
         )
 
-        # Extract and store response
-        assistant_reply = response.choices[0].message.content
-        self.conversation.append({"role": "assistant", "content": assistant_reply})
+    async def get_setting():
+        return client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": f"Describe setting for story about {topic}"}]
+        )
 
-        return assistant_reply
+    async def get_plot():
+        return client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": f"Create plot for story about {topic}"}]
+        )
 
-# Usage
-agent = ConversationAgent("You are a helpful data science tutor")
-print(agent.chat("Explain gradient descent"))
-print(agent.chat("Can you give an example?"))  # Remembers context!
+    # Run in parallel - 3x faster!
+    characters, setting, plot = await asyncio.gather(
+        get_characters(), get_setting(), get_plot()
+    )
+
+    return {
+        "characters": characters.choices[0].message.content,
+        "setting": setting.choices[0].message.content,
+        "plot": plot.choices[0].message.content
+    }
+
+# Time: ~2s instead of 6s sequential
 ```
 
 <!--
-Start with the absolute basics. This simple agent has memory and can maintain context across conversations. No frameworks needed.
+Parallel workflows dramatically reduce latency. If tasks are independent, run them simultaneously. Still not an agent - just optimized workflow.
 -->
 
 ---
 
-# Lab 1: Add Sequential Workflow
+# Lab 2: Now Build an Agent (With Loop!)
 
 ```python
-class StoryAgent(ConversationAgent):
-    """Extend our agent with sequential workflow pattern"""
+class SimpleAgent:
+    """NOW we have an agent - it has a loop and makes decisions"""
 
-    def generate_story(self, topic: str) -> Dict[str, str]:
-        results = {}
+    def __init__(self):
+        self.client = openai.OpenAI()
+        self.max_iterations = 5
 
-        # Step 1: Generate outline
-        outline_prompt = f"Create a short story outline about: {topic}"
-        results['outline'] = self.chat(outline_prompt)
+    def run(self, goal: str) -> str:
+        """Agent loop - the LLM controls the process"""
+        context = {"goal": goal, "progress": []}
 
-        # Step 2: Write first draft
-        draft_prompt = f"Write a story based on this outline: {results['outline']}"
-        results['draft'] = self.chat(draft_prompt)
+        for i in range(self.max_iterations):
+            # LLM decides what to do next
+            decision = self.client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[{
+                    "role": "system",
+                    "content": "You are solving a task step by step."
+                }, {
+                    "role": "user",
+                    "content": f"Goal: {goal}\nProgress: {context['progress']}\nWhat's next?"
+                }]
+            )
 
-        # Step 3: Add details
-        enhance_prompt = f"Enhance this story with vivid details: {results['draft']}"
-        results['final'] = self.chat(enhance_prompt)
+            next_action = decision.choices[0].message.content
 
-        return results
+            # Check if done
+            if "COMPLETE" in next_action:
+                return f"Completed: {context['progress']}"
 
-# Test the workflow
-story_agent = StoryAgent("You are a creative writer")
-story = story_agent.generate_story("a robot learning to paint")
+            # Execute action and continue loop
+            context['progress'].append(next_action)
 
-print("Outline:", story['outline'][:100], "...")
-print("Draft:", story['draft'][:100], "...")
-print("Final:", story['final'][:200], "...")
+        return f"Max iterations reached: {context['progress']}"
+
+# NOW it's an agent - it has autonomy!
+agent = SimpleAgent()
+result = agent.run("Plan a birthday party")
 ```
 
 <!--
-Now we add a sequential workflow. Each step builds on the previous one. This is how you'd build document generation or multi-stage processing.
--->
-
----
-
-# Lab 1: Implement Tool Use
-
-```python
-import json
-import requests
-
-class WeatherAgent(ConversationAgent):
-    """Add tool use capability"""
-
-    def get_weather(self, city: str) -> str:
-        """Actual tool that fetches weather"""
-        # Using a free weather API
-        response = requests.get(f"http://wttr.in/{city}?format=j1")
-        data = response.json()
-        return f"Current temp: {data['current_condition'][0]['temp_C']}°C"
-
-    def chat_with_tools(self, user_input: str) -> str:
-        # Check if weather info is needed
-        check_prompt = f"""
-        Does this request need weather information? Reply with JSON:
-        {{"needs_weather": true/false, "city": "city name or null"}}
-
-        User request: {user_input}
-        """
-
-        check_response = self.chat(check_prompt)
-
-        try:
-            decision = json.loads(check_response)
-            if decision.get('needs_weather') and decision.get('city'):
-                weather = self.get_weather(decision['city'])
-                return self.chat(f"User asked: {user_input}\nWeather: {weather}")
-        except:
-            pass
-
-        return self.chat(user_input)
-
-# Test it
-weather_agent = WeatherAgent("You are a helpful weather assistant")
-print(weather_agent.chat_with_tools("What's the weather in London?"))
-print(weather_agent.chat_with_tools("How does rain form?"))  # No tool needed
-```
-
-<!--
-Tool use lets your agent interact with external systems. Here we're checking weather, but the pattern works for any API or service.
+THIS is an agent. It has a loop, makes its own decisions, and controls the process. The difference from a workflow is autonomy.
 -->
 
 ---
@@ -1407,6 +1781,39 @@ Human feedback is crucial for high-stakes outputs. This pattern allows review an
 
 ---
 
+# Decision Flowchart: Do You Need an Agent?
+
+```mermaid
+graph TD
+    Start[Have a problem to solve] --> Q1{Can you write<br/>deterministic code?}
+    Q1 -->|Yes| Code[Use regular code<br/>Cost: $0]
+    Q1 -->|No| Q2{Is it a single<br/>classification/extraction?}
+    Q2 -->|Yes| Single[Single LLM call<br/>Cost: $0.001]
+    Q2 -->|No| Q3{Are the steps<br/>known in advance?}
+    Q3 -->|Yes| Workflow[Use workflow pattern<br/>Cost: $0.01]
+    Q3 -->|No| Q4{Does it need<br/>dynamic planning?}
+    Q4 -->|No| Enhanced[Workflow + tools<br/>Cost: $0.05]
+    Q4 -->|Yes| Q5{Can one agent<br/>handle it?}
+    Q5 -->|Yes| Agent[Single agent<br/>Cost: $0.10+]
+    Q5 -->|No| Multi[Multi-agent<br/>Cost: $1.00+]
+
+    style Code fill:#90EE90
+    style Single fill:#98FB98
+    style Workflow fill:#FFFFE0
+    style Enhanced fill:#FFE4B5
+    style Agent fill:#FFB6C1
+    style Multi fill:#FFA07A
+```
+
+<div class="mt-6 text-center text-lg text-gray-400">
+  Start at the top, only move down when necessary
+</div>
+
+<!--
+This flowchart is your decision guide. Always start with the simplest solution. Each step down adds cost and complexity.
+-->
+
+---
 layout: center
 ---
 
@@ -1471,7 +1878,6 @@ These are the key principles to remember. Start simple, focus on context, build 
 -->
 
 ---
-
 layout: section
 ---
 
@@ -1504,7 +1910,6 @@ Here are the key resources for diving deeper. Start with Anthropic's articles - 
 -->
 
 ---
-
 layout: center
 class: text-center
 ---
