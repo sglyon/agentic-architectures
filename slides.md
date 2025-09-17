@@ -1603,7 +1603,7 @@ color: blue-light
 
 <Admonition v-click title="📓 Open the Notebook" color="yellow-light" width="100%">
 
-**Get started**: Open [agentic-practice.ipynb](https://raw.githubusercontent.com/sglyon/agentic-architectures/3d6d57c8a70645814f6bb96dc92a3b9b65b4c15e/agentic-practice.ipynb) for hands-on exercises with starter code and test cases
+**Get started**: Open [agentic-practice.ipynb](https://github.com/sglyon/agentic-architectures/blob/d4e841240a8ec38d7ccaa8b7839b683f80b37bbd/agentic-practice.ipynb) for hands-on exercises with starter code and test cases
 
 </Admonition>
 
